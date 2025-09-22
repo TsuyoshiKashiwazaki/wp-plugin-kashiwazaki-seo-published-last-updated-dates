@@ -1,0 +1,388 @@
+.ksplud-dates-wrapper {
+    margin: 20px 0;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    box-shadow: none;
+    position: relative;
+}
+
+.ksplud-date {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 8px 8px 0;
+    padding: 8px 12px;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    min-width: 0;
+    flex: none;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.ksplud-date:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 更新日のバッジスタイル */
+.ksplud-date-updated {
+    background: none;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.ksplud-date-updated:hover {
+    background: none;
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+/* 公開日のバッジスタイル */
+.ksplud-date-published {
+    background: none;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.ksplud-date-published:hover {
+    background: none;
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.ksplud-date+.ksplud-date {
+    margin-top: 0;
+}
+
+.ksplud-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 6px;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    transition: all 0.2s ease;
+}
+
+.ksplud-date-updated .ksplud-icon {
+    background: none;
+}
+
+.ksplud-date-published .ksplud-icon {
+    background: none;
+}
+
+.ksplud-icon-svg {
+    width: 16px;
+    height: 16px;
+    stroke: #6b7280;
+    transition: stroke 0.2s ease;
+}
+
+.ksplud-label {
+    margin-right: 4px;
+    font-weight: 600;
+    color: #374151;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+}
+
+/* カスタム要素（published-date/updated-date）に移行済み
+   .ksplud-date time は削除 */
+
+.ksplud-shortcode-date {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    margin: 0 2px;
+}
+
+.ksplud-shortcode-date .ksplud-icon {
+    margin-right: 4px;
+}
+
+.ksplud-shortcode-date .ksplud-label {
+    margin-right: 4px;
+}
+
+.ksplud-shortcode-both-dates {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.ksplud-separator {
+    margin: 0 8px;
+    color: #999;
+    font-weight: 300;
+}
+
+/* タブレット対応 */
+@media screen and (max-width: 768px) {
+    .ksplud-dates-wrapper {
+        gap: 12px;
+    }
+
+    .ksplud-date {
+        flex: 1;
+        min-width: 200px;
+        max-width: none;
+    }
+}
+
+/* スマホ対応 */
+@media screen and (max-width: 600px) {
+    .ksplud-dates-wrapper {
+        gap: 10px;
+    }
+
+    .ksplud-date {
+        flex: 1;
+        min-width: 150px;
+        padding: 0;
+    }
+
+    .ksplud-label {
+        font-size: 12px;
+    }
+
+    /* カスタム要素（published-date/updated-date）に移行済み */
+}
+
+/* 小さなスマホ対応 */
+@media screen and (max-width: 480px) {
+    .ksplud-dates-wrapper {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .ksplud-date {
+        justify-content: flex-start;
+        max-width: none;
+        min-width: 0;
+        flex: none;
+    }
+
+    .ksplud-icon {
+        margin-right: 6px;
+        padding: 3px;
+    }
+
+    .ksplud-label {
+        margin-right: 6px;
+    }
+}
+
+/* 極小デバイス対応 */
+@media screen and (max-width: 360px) {
+    .ksplud-dates-wrapper {
+        margin: 15px 0;
+    }
+
+    .ksplud-date {
+        padding: 0;
+    }
+
+    .ksplud-label {
+        font-size: 11px;
+    }
+
+    /* カスタム要素（published-date/updated-date）に移行済み */
+
+    .ksplud-icon-svg {
+        width: 14px;
+        height: 14px;
+    }
+}
+
+/* ==============================================
+   デザインパターン別スタイル
+   ============================================== */
+
+/* 1. シンプルテキストパターン */
+.ksplud-pattern-simple .ksplud-date {
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 4px 0 !important;
+    margin: 0 20px 8px 0 !important;
+}
+
+.ksplud-pattern-simple .ksplud-date:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.ksplud-pattern-simple .ksplud-icon {
+    background: none !important;
+    padding: 0 !important;
+    margin-right: 8px !important;
+}
+
+/* 2. ボックススタイルパターン */
+.ksplud-pattern-box .ksplud-date {
+    border-radius: 4px !important;
+    border: 2px solid !important;
+    padding: 10px 15px !important;
+    box-shadow: none !important;
+}
+
+.ksplud-pattern-box .ksplud-date-updated {
+    background: #f8fafc !important;
+    border-color: currentColor !important;
+}
+
+.ksplud-pattern-box .ksplud-date-published {
+    background: #f8fafc !important;
+    border-color: currentColor !important;
+}
+
+.ksplud-pattern-box .ksplud-date:hover {
+    transform: none !important;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+.ksplud-pattern-box .ksplud-icon {
+    background: none !important;
+    padding: 3px !important;
+    border-radius: 4px !important;
+}
+
+/* 3. ライン付きスタイルパターン */
+.ksplud-pattern-line .ksplud-date {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    border-left: 4px solid !important;
+    border-radius: 6px !important;
+    padding: 12px 16px !important;
+    margin: 0 0 12px 0 !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+.ksplud-pattern-line .ksplud-date {
+    border-left-color: var(--ksplud-date-color, #0ea5e9) !important;
+}
+
+.ksplud-pattern-line .ksplud-date:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15) !important;
+}
+
+.ksplud-pattern-line .ksplud-icon {
+    background: rgba(255, 255, 255, 0.9) !important;
+    padding: 4px !important;
+    border-radius: 50% !important;
+    margin-right: 10px !important;
+}
+
+/* 4. バッジパターン（デフォルト、現在のスタイル）*/
+.ksplud-pattern-badge .ksplud-date {
+    /* 既存のバッジスタイルをそのまま使用 */
+}
+
+/* ==============================================
+   カスタム要素（Custom Elements）のスタイル
+   ============================================== */
+
+/* published-date と updated-date カスタム要素のベーススタイル */
+published-date,
+updated-date {
+    display: inline;
+    font-weight: 500;
+    font-size: inherit;
+    line-height: inherit;
+    white-space: nowrap;
+    cursor: help;
+    transition: all 0.2s ease;
+    color: inherit;
+}
+
+/* 統一されたカラー設定 */
+updated-date,
+published-date {
+    color: var(--ksplud-date-color, #0ea5e9);
+    font-weight: 500;
+}
+
+/* 更新日の太字設定 */
+.ksplud-date-updated updated-date {
+    font-weight: 600;
+}
+
+/* 両方の日付が表示される場合の更新日強調 */
+.ksplud-dates-wrapper.ksplud-both-dates .ksplud-date-updated updated-date {
+    font-weight: 700 !important;
+}
+
+.ksplud-dates-wrapper.ksplud-both-dates .ksplud-date-updated .ksplud-label {
+    font-weight: 700;
+}
+
+/* 両方表示時の公開日を薄く */
+.ksplud-dates-wrapper.ksplud-both-dates .ksplud-date-published {
+    opacity: 0.5;
+}
+
+/* ホバー効果 */
+published-date:hover,
+updated-date:hover {
+    opacity: 0.8;
+}
+
+/* レガシーブラウザ用のフォールバック */
+.ksplud-published-date-fallback,
+.ksplud-updated-date-fallback {
+    display: inline;
+    font-weight: 500;
+    font-size: inherit;
+    line-height: inherit;
+    white-space: nowrap;
+    cursor: help;
+    transition: all 0.2s ease;
+}
+
+.ksplud-published-date-fallback:hover,
+.ksplud-updated-date-fallback:hover {
+    opacity: 0.8;
+}
+
+/* カスタム要素が未定義の場合のスタイル */
+published-date:not(:defined),
+updated-date:not(:defined) {
+    display: inline;
+    opacity: 0.7;
+}
+
+/* デバッグ用：カスタム要素が正常に動作している場合の表示 */
+published-date:defined,
+updated-date:defined {
+    /* カスタム要素が正常に定義されている場合のスタイル */
+}
+
+/* アクセシビリティ：フォーカス時のスタイル */
+published-date:focus,
+updated-date:focus {
+    outline: 2px solid #0073aa;
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* 高解像度ディスプレイでの調整 */
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+
+    published-date,
+    updated-date {
+        font-weight: 400;
+    }
+}

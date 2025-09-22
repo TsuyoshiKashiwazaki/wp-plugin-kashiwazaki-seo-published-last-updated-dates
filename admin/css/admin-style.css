@@ -1,0 +1,194 @@
+.ksplud-settings-container {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.ksplud-settings-main {
+    flex: 1;
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ccd0d4;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+}
+
+.ksplud-settings-sidebar {
+    width: 300px;
+}
+
+.ksplud-info-box {
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ccd0d4;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+}
+
+.ksplud-info-box h3 {
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.ksplud-info-box h4 {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.ksplud-info-box code {
+    background: #f4f4f4;
+    padding: 2px 5px;
+    border-radius: 3px;
+}
+
+.form-table th {
+    width: 200px;
+}
+
+.form-table td label {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.form-table td input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+/* 投稿タイプ別設定のスタイル */
+.ksplud-post-type-settings {
+    max-width: 600px;
+}
+
+.ksplud-post-type-setting {
+    background: #f9f9f9;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    padding: 10px !important;
+    margin-bottom: 15px !important;
+}
+
+.ksplud-post-type-setting h4 {
+    margin: 0 0 8px 0 !important;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.ksplud-post-type-setting label {
+    display: block !important;
+    margin-bottom: 5px !important;
+    font-size: 13px;
+}
+
+.ksplud-post-type-setting input[type="checkbox"] {
+    margin-right: 6px;
+}
+
+@media screen and (max-width: 782px) {
+    .ksplud-settings-container {
+        flex-direction: column;
+    }
+
+    .ksplud-settings-sidebar {
+        width: 100%;
+    }
+
+    .ksplud-post-type-setting {
+        padding: 8px !important;
+    }
+}
+
+/* カラーピッカー設定のスタイル - フレックスで簡潔に */
+.ksplud-color-settings {
+    max-width: 560px;
+}
+
+.ksplud-color-settings label {
+    display: block;
+    margin: 16px 0;
+    font-weight: 600;
+}
+
+/* JSで .wp-picker-container に包まれる */
+.ksplud-color-settings .wp-picker-container {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    flex-wrap: wrap !important;
+    margin-top: 6px !important;
+}
+
+.ksplud-color-settings .wp-color-result,
+.ksplud-color-settings .wp-picker-input-wrap,
+.ksplud-color-settings .wp-picker-default {
+    margin: 0 !important;
+    float: none !important;
+}
+
+.ksplud-color-settings .wp-picker-input-wrap {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.ksplud-color-settings input.wp-color-picker {
+    width: 100px !important;
+}
+
+@media (max-width: 600px) {
+    .ksplud-color-settings .wp-picker-container {
+        gap: 10px !important;
+    }
+
+    .ksplud-color-settings input.wp-color-picker {
+        width: 90px !important;
+    }
+}
+
+/* デザインパターン選択のスタイル */
+.ksplud-design-patterns {
+    max-width: 600px;
+}
+
+.ksplud-pattern-option {
+    display: block;
+    margin-bottom: 15px;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #fafafa;
+}
+
+.ksplud-pattern-option:hover {
+    border-color: #0073aa;
+    background: #f0f8ff;
+}
+
+.ksplud-pattern-option input[type="radio"] {
+    margin-right: 12px;
+    margin-top: 0;
+}
+
+.ksplud-pattern-option input[type="radio"]:checked+.pattern-preview {
+    color: #0073aa;
+}
+
+.ksplud-pattern-option:has(input:checked) {
+    border-color: #0073aa;
+    background: #f0f8ff;
+}
+
+.pattern-preview strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.pattern-preview p {
+    margin: 0;
+    font-size: 13px;
+    color: #666;
+    line-height: 1.4;
+}
