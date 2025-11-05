@@ -5,6 +5,16 @@ All notable changes to Kashiwazaki SEO Published & Last Updated Dates will be do
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2025-11-05
+
+### Improved
+- Enhanced post type settings UI by integrating per-post-type display settings (show published/updated checkboxes) directly into the target post types section for better usability
+- Added HTML comment signatures (`<!-- Kashiwazaki SEO Published & Last Updated Dates -->`) around Schema.org markup output for easier identification in page source
+
+### Fixed
+- Optimized query processing for URL conflicts where custom post slugs match post type archive URLs
+- Removed unnecessary `is_main_query()` check that was preventing date display in certain edge cases
+
 ## [1.0.0] - 2025-09-22
 
 ### Added

@@ -108,15 +108,51 @@ class KSPLUD_Admin {
                             <tr>
                                 <th scope="row"><?php _e('対象投稿タイプ', 'kashiwazaki-seo-published-last-updated-dates'); ?></th>
                                 <td>
-                                    <?php foreach ($post_types as $post_type) : ?>
-                                        <?php if ($post_type->name === 'attachment') continue; ?>
-                                        <label>
-                                            <input type="checkbox" name="ksplud_settings[post_types][]"
-                                                   value="<?php echo esc_attr($post_type->name); ?>"
-                                                   <?php checked(in_array($post_type->name, $options['post_types'])); ?>>
-                                            <?php echo esc_html($post_type->label); ?>
-                                        </label><br>
+                                    <?php
+                                    $post_type_settings = isset($options['post_type_settings']) ? $options['post_type_settings'] : array();
+
+                                    foreach ($post_types as $post_type) :
+                                        if ($post_type->name === 'attachment') continue;
+
+                                        $is_enabled = in_array($post_type->name, $options['post_types']);
+                                        $show_published = isset($post_type_settings[$post_type->name]['show_published'])
+                                            ? $post_type_settings[$post_type->name]['show_published']
+                                            : true;
+                                        $show_updated = isset($post_type_settings[$post_type->name]['show_updated'])
+                                            ? $post_type_settings[$post_type->name]['show_updated']
+                                            : true;
+                                    ?>
+                                        <div class="ksplud-post-type-item" style="margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                                            <label style="display: block; margin-bottom: 8px; font-weight: bold;">
+                                                <input type="checkbox"
+                                                       name="ksplud_settings[post_types][]"
+                                                       value="<?php echo esc_attr($post_type->name); ?>"
+                                                       class="ksplud-post-type-checkbox"
+                                                       data-post-type="<?php echo esc_attr($post_type->name); ?>"
+                                                       <?php checked($is_enabled); ?>>
+                                                <?php echo esc_html($post_type->label); ?>
+                                            </label>
+                                            <div class="ksplud-post-type-settings"
+                                                 data-post-type="<?php echo esc_attr($post_type->name); ?>"
+                                                 style="margin-left: 24px; <?php echo $is_enabled ? '' : 'display: none;'; ?>">
+                                                <label style="display: block; margin-bottom: 5px;">
+                                                    <input type="checkbox"
+                                                           name="ksplud_settings[post_type_settings][<?php echo esc_attr($post_type->name); ?>][show_published]"
+                                                           value="1"
+                                                           <?php checked($show_published, true); ?>>
+                                                    <?php _e('公開日を表示', 'kashiwazaki-seo-published-last-updated-dates'); ?>
+                                                </label>
+                                                <label style="display: block;">
+                                                    <input type="checkbox"
+                                                           name="ksplud_settings[post_type_settings][<?php echo esc_attr($post_type->name); ?>][show_updated]"
+                                                           value="1"
+                                                           <?php checked($show_updated, true); ?>>
+                                                    <?php _e('更新日を表示', 'kashiwazaki-seo-published-last-updated-dates'); ?>
+                                                </label>
+                                            </div>
+                                        </div>
                                     <?php endforeach; ?>
+                                    <p class="description"><?php _e('投稿タイプをチェックすると、そのタイプの詳細設定が表示されます', 'kashiwazaki-seo-published-last-updated-dates'); ?></p>
                                 </td>
                             </tr>
 
@@ -164,41 +200,6 @@ class KSPLUD_Admin {
                             </tr>
 
                             <tr>
-                                <th scope="row"><?php _e('投稿タイプ別表示設定', 'kashiwazaki-seo-published-last-updated-dates'); ?></th>
-                                <td>
-                                    <div class="ksplud-post-type-settings">
-                                        <?php
-                                        $post_types = $this->settings->get_all_post_types_for_settings();
-                                        $post_type_settings = isset($options['post_type_settings']) ? $options['post_type_settings'] : array();
-
-                                        foreach ($post_types as $post_type) :
-                                            $show_published = isset($post_type_settings[$post_type->name]['show_published'])
-                                                ? $post_type_settings[$post_type->name]['show_published']
-                                                : true;
-                                            $show_updated = isset($post_type_settings[$post_type->name]['show_updated'])
-                                                ? $post_type_settings[$post_type->name]['show_updated']
-                                                : true;
-                                        ?>
-                                        <div class="ksplud-post-type-setting" style="margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
-                                            <h4 style="margin: 0 0 8px 0;"><?php echo esc_html($post_type->label); ?> (<?php echo esc_html($post_type->name); ?>)</h4>
-                                            <label style="display: block; margin-bottom: 5px;">
-                                                <input type="checkbox" name="ksplud_settings[post_type_settings][<?php echo esc_attr($post_type->name); ?>][show_published]" value="1"
-                                                       <?php checked($show_published, true); ?>>
-                                                <?php _e('公開日を表示', 'kashiwazaki-seo-published-last-updated-dates'); ?>
-                                            </label>
-                                            <label style="display: block;">
-                                                <input type="checkbox" name="ksplud_settings[post_type_settings][<?php echo esc_attr($post_type->name); ?>][show_updated]" value="1"
-                                                       <?php checked($show_updated, true); ?>>
-                                                <?php _e('更新日を表示', 'kashiwazaki-seo-published-last-updated-dates'); ?>
-                                            </label>
-                                        </div>
-                                        <?php endforeach; ?>
-                                    </div>
-                                    <p class="description"><?php _e('投稿タイプごとに公開日と更新日の表示を個別に制御できます', 'kashiwazaki-seo-published-last-updated-dates'); ?></p>
-                                </td>
-                            </tr>
-
-                                                        <tr>
                                 <th scope="row"><?php _e('カラー設定', 'kashiwazaki-seo-published-last-updated-dates'); ?></th>
                                 <td>
                                     <div class="ksplud-color-settings">

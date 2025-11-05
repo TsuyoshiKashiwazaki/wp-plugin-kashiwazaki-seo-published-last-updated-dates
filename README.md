@@ -1,26 +1,26 @@
-# 🚀 Kashiwazaki SEO Published & Last Updated Dates
+# Kashiwazaki SEO Published & Last Updated Dates
 
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-7.2%2B-purple.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/License-GPL--2.0--or--later-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
-[![Version](https://img.shields.io/badge/Version-1.0.0-orange.svg)](https://github.com/TsuyoshiKashiwazaki/wp-plugin-kashiwazaki-seo-published-last-updated-dates/releases)
+[![Version](https://img.shields.io/badge/Version-1.0.1--dev-orange.svg)](https://github.com/TsuyoshiKashiwazaki/wp-plugin-kashiwazaki-seo-published-last-updated-dates/releases)
 
 A WordPress SEO plugin that automatically displays published and last updated dates for posts and pages. Features include responsive design with horizontal layout, shortcode support, PHP functions for theme integration, non-conflicting DigitalDocument schema markup, Last-Modified HTTP headers, and customizable styling options.
 
-> 🎯 **Enhance your SEO with clear date display and structured data that doesn't conflict with existing markup**
+> **Enhance your SEO with clear date display and structured data that doesn't conflict with existing markup**
 
-## 主な機能 / Key Features
+## Key Features
 
-- **📅 Automatic Date Display** - Shows published and updated dates before/after posts with beautiful horizontal layout
-- **🏗️ Non-conflicting Schema Markup** - Uses DigitalDocument format to avoid conflicts with existing structured data
-- **🔌 Multiple Integration Methods** - Shortcodes, PHP functions, and automatic display
-- **📱 Responsive Design** - Horizontal layout on desktop, vertical on mobile
-- **⚡ Last-Modified Headers** - Automatically outputs HTTP Last-Modified headers for better SEO
-- **🎨 Customizable Styling** - Choose from icon+text, text-only, or icon-only display styles
-- **📝 Flexible Post Type Support** - Works with posts, pages, and custom post types
-- **🌐 Custom Date Formats** - Fully customizable date formatting options
+- **Automatic Date Display** - Shows published and updated dates before/after posts with beautiful horizontal layout
+- **Non-conflicting Schema Markup** - Uses DigitalDocument format to avoid conflicts with existing structured data
+- **Multiple Integration Methods** - Shortcodes, PHP functions, and automatic display
+- **Responsive Design** - Horizontal layout on desktop, vertical on mobile
+- **Last-Modified Headers** - Automatically outputs HTTP Last-Modified headers for better SEO
+- **Customizable Styling** - Choose from icon+text, text-only, or icon-only display styles
+- **Flexible Post Type Support** - Works with posts, pages, and custom post types
+- **Custom Date Formats** - Fully customizable date formatting options
 
-## 🚀 Quick Start / クイックスタート
+## Quick Start
 
 ### Installation
 
@@ -94,6 +94,11 @@ This plugin uses a unique **DigitalDocument + CreateAction + UpdateAction** sche
 
 ## Changelog
 
+### Version 1.0.1 - 2025-11-05
+- **Improved**: Enhanced post type settings UI by integrating per-post-type display settings into target post types section
+- **Improved**: Added HTML comment signatures around Schema.org markup output for easier identification
+- **Fixed**: Optimized query processing for URL conflicts
+
 ### Version 1.0.0 - 2025-09-22
 - Initial release
 - Automatic date display functionality
@@ -115,7 +120,7 @@ This plugin is licensed under the GPL v2.0 or later.
 **Website**: https://www.tsuyoshikashiwazaki.jp/
 **Support**: For questions or bug reports, please visit the developer's website.
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit issues or pull requests.
 
@@ -125,16 +130,12 @@ Contributions are welcome! Please feel free to submit issues or pull requests.
 4. Push to the branch
 5. Open a Pull Request
 
-## 📞 Support
+## Support
 
 For support, please visit the developer's website or create an issue in this repository.
 
 ---
 
-<div align="center">
+**Keywords**: SEO, WordPress, published date, updated date, last modified, schema markup, structured data, responsive design
 
-**🔍 Keywords**: SEO, WordPress, published date, updated date, last modified, schema markup, structured data, responsive design
-
-Made with ❤️ by [Tsuyoshi Kashiwazaki](https://github.com/TsuyoshiKashiwazaki)
-
-</div>
+Made by [Tsuyoshi Kashiwazaki](https://github.com/TsuyoshiKashiwazaki)

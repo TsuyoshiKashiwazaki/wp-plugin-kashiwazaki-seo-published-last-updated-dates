@@ -24,19 +24,34 @@ class KSPLUD_Display {
         add_filter('the_content', array($this, 'add_dates_to_content'), 10);
         add_action('wp_head', array($this, 'output_custom_css'));
         add_action('template_redirect', array($this, 'add_last_modified_header'));
+        add_action('pre_get_posts', array($this, 'fix_query_conflicts'), 1);
     }
 
     public function add_dates_to_content($content) {
-        if (!is_singular() || !in_the_loop() || !is_main_query()) {
+        // 管理画面やREST APIでは実行しない
+        if (is_admin() || (defined('REST_REQUEST') && REST_REQUEST)) {
             return $content;
         }
 
-        $post_type = get_post_type();
-        if (!$this->settings->is_enabled_for_post_type($post_type)) {
+        // フィードでは実行しない
+        if (is_feed()) {
             return $content;
         }
 
-        $dates_html = $this->get_dates_html();
+        // is_singular()がtrueかつループ内の場合のみ処理
+        if (!is_singular() || !in_the_loop()) {
+            return $content;
+        }
+
+        $post_id = get_the_ID();
+        $post_type = get_post_type($post_id);
+
+        // 記事が見つからない、または有効な投稿タイプでない場合
+        if (!$post_id || !$post_type || !$this->settings->is_enabled_for_post_type($post_type)) {
+            return $content;
+        }
+
+        $dates_html = $this->get_dates_html($post_id);
         $position = $this->settings->get_display_position();
 
         switch ($position) {
@@ -49,6 +64,47 @@ class KSPLUD_Display {
             default:
                 return $content;
         }
+    }
+
+    private function find_post_by_current_url() {
+        // 現在のURLパスを取得
+        $request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+        if (empty($request_uri)) {
+            return null;
+        }
+
+        // クエリストリングを除去
+        $path = parse_url($request_uri, PHP_URL_PATH);
+        $path = trim($path, '/');
+
+        // パスの最後のセグメントをスラグとして取得
+        $segments = explode('/', $path);
+        $slug = end($segments);
+
+        if (empty($slug)) {
+            return null;
+        }
+
+        // 有効化された投稿タイプで検索
+        $enabled_post_types = $this->settings->get_enabled_post_types();
+
+        $args = array(
+            'post_type' => $enabled_post_types,
+            'name' => $slug,
+            'post_status' => 'publish',
+            'posts_per_page' => 1,
+            'no_found_rows' => true,
+            'update_post_meta_cache' => false,
+            'update_post_term_cache' => false,
+        );
+
+        $query = new WP_Query($args);
+
+        if ($query->have_posts()) {
+            return $query->posts[0];
+        }
+
+        return null;
     }
 
     public function get_dates_html($post_id = null) {
@@ -225,6 +281,33 @@ class KSPLUD_Display {
         }
 
         echo '</style>' . "\n";
+    }
+
+    public function fix_query_conflicts($query) {
+        // メインクエリのみ処理
+        if (!$query->is_main_query() || is_admin()) {
+            return;
+        }
+
+        // is_post_type_archiveの場合、同名の個別記事が存在するかチェック
+        if ($query->is_post_type_archive || !$query->is_singular) {
+            $found_post = $this->find_post_by_current_url();
+
+            if ($found_post && $this->settings->is_enabled_for_post_type($found_post->post_type)) {
+                // アーカイブクエリを個別記事クエリに変更
+                $query->init();
+                $query->is_singular = true;
+                $query->is_single = ($found_post->post_type === 'post');
+                $query->is_page = ($found_post->post_type === 'page');
+                $query->is_archive = false;
+                $query->is_post_type_archive = false;
+                $query->set('p', $found_post->ID);
+                $query->set('post_type', $found_post->post_type);
+                $query->set('name', '');
+                $query->queried_object = $found_post;
+                $query->queried_object_id = $found_post->ID;
+            }
+        }
     }
 
     public function add_last_modified_header() {

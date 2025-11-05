@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Kashiwazaki SEO Published & Last Updated Dates
- * Plugin URI: https://www.tsuyoshikashiwazaki.jp
+ * Plugin URI: https://tsuyoshikashiwazaki.jp
  * Description: 記事の公開日と更新日を表示するSEO対策プラグイン
- * Version: 1.0.0
- * Author: 柏崎剛 (Tsuyoshi Kashiwazaki)
- * Author URI: https://www.tsuyoshikashiwazaki.jp/profile/
+ * Version: 1.0.1
+ * Author: 柏崎 剛
+ * Author URI: https://tsuyoshikashiwazaki.jp
  * License: GPL-2.0+
  * Text Domain: kashiwazaki-seo-published-last-updated-dates
  * Domain Path: /languages
@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('KSPLUD_VERSION', '1.0.0');
+define('KSPLUD_VERSION', '1.0.1');
 define('KSPLUD_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('KSPLUD_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('KSPLUD_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -73,6 +73,15 @@ class Kashiwazaki_SEO_Published_Last_Updated_Dates {
             array(),
             KSPLUD_VERSION
         );
+
+        // カスタム要素のJavaScriptを読み込み
+        wp_enqueue_script(
+            'ksplud-custom-elements',
+            KSPLUD_PLUGIN_URL . 'public/js/custom-elements.js',
+            array(),
+            KSPLUD_VERSION,
+            true
+        );
     }
 }
 
@@ -93,7 +102,29 @@ function ksplud_activate() {
         'enable_schema' => true,
         'date_format' => 'Y年n月j日',
         'show_time' => false,
-        'custom_css' => ''
+        'custom_css' => '',
+        'published_text' => '公開日',
+        'updated_text' => '更新日',
+        'icon_style' => 'default',
+        'show_published' => true,
+        'show_updated' => true,
+        'hide_if_not_modified' => true,
+        'modified_threshold' => 86400,
+        // カラー設定
+        'date_color' => '#0ea5e9',
+        // デザインパターン設定
+        'design_pattern' => 'badge',
+        // 投稿タイプ別設定
+        'post_type_settings' => array(
+            'post' => array(
+                'show_published' => true,
+                'show_updated' => true
+            ),
+            'page' => array(
+                'show_published' => true,
+                'show_updated' => true
+            )
+        )
     );
 
     if (!get_option('ksplud_settings')) {

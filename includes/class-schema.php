@@ -40,7 +40,9 @@ class KSPLUD_Schema {
         $schema = $this->generate_article_schema($post_id);
         
         if (!empty($schema)) {
+            echo '<!-- Kashiwazaki SEO Published & Last Updated Dates - Schema.org Markup Start -->' . "\n";
             echo '<script type="application/ld+json">' . wp_json_encode($schema) . '</script>' . "\n";
+            echo '<!-- Kashiwazaki SEO Published & Last Updated Dates - Schema.org Markup End -->' . "\n";
         }
     }
     

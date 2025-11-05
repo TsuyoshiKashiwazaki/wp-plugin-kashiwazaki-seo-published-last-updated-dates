@@ -56,6 +56,18 @@
                 return false;
             }
         });
+
+        // 対象投稿タイプのチェックボックス変更時に詳細設定を表示/非表示
+        $('.ksplud-post-type-checkbox').on('change', function() {
+            var postType = $(this).data('post-type');
+            var $settings = $('.ksplud-post-type-settings[data-post-type="' + postType + '"]');
+
+            if ($(this).is(':checked')) {
+                $settings.slideDown(200);
+            } else {
+                $settings.slideUp(200);
+            }
+        });
     });
 
 })(jQuery);

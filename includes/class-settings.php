@@ -34,7 +34,22 @@ class KSPLUD_Settings {
             'show_published' => true,
             'show_updated' => true,
             'hide_if_not_modified' => true,
-            'modified_threshold' => 86400
+            'modified_threshold' => 86400,
+            // カラー設定
+            'date_color' => '#0ea5e9',
+            // デザインパターン設定
+            'design_pattern' => 'badge',
+            // 投稿タイプ別設定
+            'post_type_settings' => array(
+                'post' => array(
+                    'show_published' => true,
+                    'show_updated' => true
+                ),
+                'page' => array(
+                    'show_published' => true,
+                    'show_updated' => true
+                )
+            )
         );
     }
 
@@ -79,5 +94,42 @@ class KSPLUD_Settings {
             $format .= ' H:i';
         }
         return $format;
+    }
+
+    public function get_post_type_setting($post_type, $setting_key, $default = null) {
+        $post_type_settings = $this->get_option('post_type_settings', array());
+
+        if (isset($post_type_settings[$post_type][$setting_key])) {
+            return $post_type_settings[$post_type][$setting_key];
+        }
+
+        // フォールバック: グローバル設定を確認
+        if ($setting_key === 'show_published' || $setting_key === 'show_updated') {
+            return $this->get_option($setting_key, $default !== null ? $default : true);
+        }
+
+        return $default;
+    }
+
+    public function should_show_published_for_post_type($post_type) {
+        return (bool) $this->get_post_type_setting($post_type, 'show_published', true);
+    }
+
+    public function should_show_updated_for_post_type($post_type) {
+        return (bool) $this->get_post_type_setting($post_type, 'show_updated', true);
+    }
+
+    public function get_all_post_types_for_settings() {
+        $post_types = get_post_types(array('public' => true), 'objects');
+        $enabled_post_types = $this->get_enabled_post_types();
+        $filtered_post_types = array();
+
+        foreach ($post_types as $post_type) {
+            if ($post_type->name !== 'attachment' && in_array($post_type->name, $enabled_post_types)) {
+                $filtered_post_types[$post_type->name] = $post_type;
+            }
+        }
+
+        return $filtered_post_types;
     }
 }
