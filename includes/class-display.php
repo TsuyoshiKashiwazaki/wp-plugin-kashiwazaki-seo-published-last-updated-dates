@@ -289,8 +289,19 @@ class KSPLUD_Display {
             return;
         }
 
-        // is_post_type_archiveの場合、同名の個別記事が存在するかチェック
-        if ($query->is_post_type_archive || !$query->is_singular) {
+        // カスタム投稿タイプのアーカイブページの場合はスキップ
+        // アーカイブページを誤って個別記事に変換しないようにする
+        if ($query->is_post_type_archive()) {
+            return;
+        }
+
+        // カテゴリ、タグ、タクソノミーアーカイブ、日付アーカイブなどもスキップ
+        if ($query->is_archive() || $query->is_category() || $query->is_tag() || $query->is_tax() || $query->is_date()) {
+            return;
+        }
+
+        // is_singularでない場合に同名の個別記事が存在するかチェック
+        if (!$query->is_singular) {
             $found_post = $this->find_post_by_current_url();
 
             if ($found_post && $this->settings->is_enabled_for_post_type($found_post->post_type)) {

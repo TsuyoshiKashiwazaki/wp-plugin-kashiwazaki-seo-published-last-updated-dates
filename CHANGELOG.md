@@ -5,6 +5,16 @@ All notable changes to Kashiwazaki SEO Published & Last Updated Dates will be do
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2025-11-26
+
+### Fixed
+- Fix query conflict logic to not convert post type archive pages to single posts
+- Prevented custom post type archive pages from being incorrectly displayed as individual posts
+
+### Improved
+- Skip archive pages (post type archive, category, tag, taxonomy, date) in `fix_query_conflicts()` method
+- Added early return checks for `is_post_type_archive()`, `is_archive()`, `is_category()`, `is_tag()`, `is_tax()`, `is_date()`
+
 ## [1.0.1] - 2025-11-05
 
 ### Improved

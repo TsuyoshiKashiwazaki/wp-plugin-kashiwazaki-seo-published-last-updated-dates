@@ -3,7 +3,7 @@ Contributors: tsuyoshikashiwazaki
 Tags: seo, published date, updated date, schema markup, structured data, last-modified
 Requires at least: 5.0
 Tested up to: 6.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -151,6 +151,10 @@ HTTPレスポンスヘッダーに記事の最終更新日を追加する機能�
 
 == Changelog ==
 
+= 1.0.2 =
+* Fixed: カスタム投稿タイプのアーカイブページが誤って個別記事に変換される問題を修正
+* Improved: fix_query_conflicts()でアーカイブページ（投稿タイプアーカイブ、カテゴリー、タグ、タクソノミー、日付）をスキップするように改善
+
 = 1.0.1 =
 * Improved: 対象投稿タイプの設定UIを改善し、投稿タイプ別の公開日・更新日表示設定を統合
 * Improved: Schema.orgマークアップ出力箇所にHTMLコメントで署名を追加
@@ -168,6 +172,9 @@ HTTPレスポンスヘッダーに記事の最終更新日を追加する機能�
 * カスタムCSS対応
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+カスタム投稿タイプのアーカイブページが正しく表示されるようになりました。アーカイブページが個別記事として表示されていた問題を修正しています。
 
 = 1.0.1 =
 設定画面のUIが改善され、より使いやすくなりました。Schema.orgマークアップの識別も容易になります。

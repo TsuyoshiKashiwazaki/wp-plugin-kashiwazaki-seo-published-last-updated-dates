@@ -3,7 +3,7 @@
  * Plugin Name: Kashiwazaki SEO Published & Last Updated Dates
  * Plugin URI: https://tsuyoshikashiwazaki.jp
  * Description: 記事の公開日と更新日を表示するSEO対策プラグイン
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: 柏崎 剛
  * Author URI: https://tsuyoshikashiwazaki.jp
  * License: GPL-2.0+
@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('KSPLUD_VERSION', '1.0.1');
+define('KSPLUD_VERSION', '1.0.2');
 define('KSPLUD_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('KSPLUD_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('KSPLUD_PLUGIN_BASENAME', plugin_basename(__FILE__));

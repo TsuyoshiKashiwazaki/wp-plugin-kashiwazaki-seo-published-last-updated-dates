@@ -3,7 +3,7 @@
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-7.2%2B-purple.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/License-GPL--2.0--or--later-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
-[![Version](https://img.shields.io/badge/Version-1.0.1--dev-orange.svg)](https://github.com/TsuyoshiKashiwazaki/wp-plugin-kashiwazaki-seo-published-last-updated-dates/releases)
+[![Version](https://img.shields.io/badge/Version-1.0.2-orange.svg)](https://github.com/TsuyoshiKashiwazaki/wp-plugin-kashiwazaki-seo-published-last-updated-dates/releases)
 
 A WordPress SEO plugin that automatically displays published and last updated dates for posts and pages. Features include responsive design with horizontal layout, shortcode support, PHP functions for theme integration, non-conflicting DigitalDocument schema markup, Last-Modified HTTP headers, and customizable styling options.
 
@@ -93,6 +93,10 @@ This plugin uses a unique **DigitalDocument + CreateAction + UpdateAction** sche
 - **License**: GPL v2.0 or later
 
 ## Changelog
+
+### Version 1.0.2 - 2025-11-26
+- **Fixed**: Fix query conflict logic to not convert post type archive pages to single posts
+- **Improved**: Skip archive pages (post type archive, category, tag, taxonomy, date) in fix_query_conflicts()
 
 ### Version 1.0.1 - 2025-11-05
 - **Improved**: Enhanced post type settings UI by integrating per-post-type display settings into target post types section
