@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>詳細設定 - Kashiwazaki SEO Published &amp; Last Updated Dates マニュアル</title>
+    <link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<button class="hamburger-btn" aria-label="メニュー">&#9776;</button>
+
+<nav class="sidebar">
+    <div class="sidebar-header">
+        <h2 style="color:#fff;">Published Dates</h2>
+        <span class="version">v1.0.2</span>
+        <img src="images/main-visual.png" alt="" style="width:100%;border-radius:4px;margin-top:8px;">
+    </div>
+    <ul>
+        <li><a href="index.html">概要</a></li>
+        <li><a href="setup.html">インストール・初期設定</a></li>
+        <li class="active"><a href="display-settings.html">詳細設定</a></li>
+        <li><a href="troubleshooting.html">トラブルシューティング</a></li>
+    </ul>
+</nav>
+
+<main class="content">
+    <h1>詳細設定</h1>
+    <p class="lead">デザインカスタマイズ、色・フォント設定、カスタムHTML要素の仕組みなど、Kashiwazaki SEO Published &amp; Last Updated Dates の詳細な設定項目を解説します。</p>
+
+    <h2>色のカスタマイズ</h2>
+
+    <p>日付表示の色を細かくカスタマイズできます。テーマのデザインに合わせて調整してください。</p>
+
+    <figure class="screenshot">
+        <img src="images/screenshots/02-pubdates-detail.png" alt="日付表示設定" class="lightbox-trigger">
+        <figcaption>公開日・更新日の表示設定</figcaption>
+    </figure>
+
+    <h3>フロントエンド表示例</h3>
+    <figure class="screenshot">
+        <img src="images/screenshots/03-frontend-dates.png" alt="日付バッジの表示例" class="lightbox-trigger">
+        <figcaption>投稿ページに表示された公開日・更新日バッジ</figcaption>
+    </figure>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:35%;">設定項目</th>
+                <th>説明</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>テキスト色</td>
+                <td>日付テキストの色を設定します。デフォルトはテーマの本文テキスト色に準拠します。</td>
+            </tr>
+            <tr>
+                <td>背景色</td>
+                <td>日付表示エリアの背景色を設定します。透明も指定可能です。</td>
+            </tr>
+            <tr>
+                <td>アイコン色</td>
+                <td>カレンダーアイコンの色を設定します（アイコン付きデザイン選択時のみ）。</td>
+            </tr>
+            <tr>
+                <td>ラベル色</td>
+                <td>「公開日」「更新日」ラベルの色を設定します（ラベルデザイン選択時のみ）。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="callout callout-tip">
+        <div class="callout-title">ヒント</div>
+        <p>色の設定にはカラーピッカーが使用できます。HEX値を直接入力することも可能です。テーマとの調和を意識し、コントラスト比を十分に確保してください。</p>
+    </div>
+
+    <h2>フォント設定</h2>
+
+    <p>日付テキストのフォントスタイルをカスタマイズできます。</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:35%;">設定項目</th>
+                <th>説明</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>フォントサイズ</td>
+                <td>日付テキストのフォントサイズを設定します。テーマの本文サイズに合わせて調整してください。</td>
+            </tr>
+            <tr>
+                <td>フォントウェイト</td>
+                <td>太字（bold）または通常（normal）を選択できます。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>カスタムHTML要素</h2>
+
+    <p>本プラグインは <code>&lt;ksplud-date&gt;</code> というカスタムHTML要素を使用して日付を表示します。Web Componentsの技術を活用した軽量な実装です。</p>
+
+    <h3>仕組み</h3>
+
+    <div class="step">
+        <span class="step-number">1</span>
+        <div class="step-body">
+            <p>プラグインはコンテンツの前後に <code>&lt;ksplud-date&gt;</code> カスタム要素を挿入します。</p>
+        </div>
+    </div>
+
+    <div class="step">
+        <span class="step-number">2</span>
+        <div class="step-body">
+            <p>フロントエンドJavaScript（5.4KB）がカスタム要素を定義し、Shadow DOMを使用してスタイルをカプセル化します。</p>
+        </div>
+    </div>
+
+    <div class="step">
+        <span class="step-number">3</span>
+        <div class="step-body">
+            <p>テーマのCSSとの干渉を防ぎながら、設定に基づいたデザインで日付を表示します。</p>
+        </div>
+    </div>
+
+    <div class="callout callout-note">
+        <div class="callout-title">補足</div>
+        <p>カスタムHTML要素はすべてのモダンブラウザ（Chrome、Firefox、Safari、Edge）でサポートされています。IE11はサポート対象外です。</p>
+    </div>
+
+    <h3>出力されるHTMLの例</h3>
+
+    <pre><code>&lt;ksplud-date
+  data-published="2024-01-15"
+  data-updated="2024-06-20"
+  data-design="icon"
+  data-color-text="#333333"
+  data-color-bg="transparent"&gt;
+&lt;/ksplud-date&gt;</code></pre>
+
+    <h2>表示内容の設定</h2>
+
+    <p>日付として表示する内容を細かく設定できます。</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:35%;">設定項目</th>
+                <th>説明</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>公開日の表示</td>
+                <td>公開日を表示するかどうかを設定します。</td>
+            </tr>
+            <tr>
+                <td>更新日の表示</td>
+                <td>更新日を表示するかどうかを設定します。公開日と更新日が同じ場合は非表示にするオプションもあります。</td>
+            </tr>
+            <tr>
+                <td>日付フォーマット</td>
+                <td>WordPressの日付フォーマット設定に準拠します。管理画面の「設定 &gt; 一般」で変更できます。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="callout callout-warning">
+        <div class="callout-title">注意</div>
+        <p>公開日と更新日の両方を非表示にした場合でも、JSON-LDの出力は継続されます。構造化データのみを出力し、視覚的な日付表示を行わない運用も可能です。</p>
+    </div>
+
+    <h2>JSON-LDの詳細</h2>
+
+    <p>本プラグインが出力するJSON-LDスキーマの詳細を説明します。</p>
+
+    <h3>DigitalDocumentスキーマ</h3>
+    <p>DigitalDocument は Schema.org で定義されたデジタル文書のスキーマです。ブログ記事やWebページのメタデータを構造化するのに適しています。</p>
+
+    <h3>CreateAction / UpdateAction</h3>
+    <p>CreateAction はコンテンツの作成（公開）イベント、UpdateAction はコンテンツの更新イベントを表します。<code>potentialAction</code> プロパティとして DigitalDocument に関連付けられ、コンテンツのライフサイクルを明確に伝達します。</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:35%;">スキーマ</th>
+                <th>役割</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>DigitalDocument</td>
+                <td>デジタル文書としてのページメタデータ（名前、URL、作成日、更新日）を構造化</td>
+            </tr>
+            <tr>
+                <td>CreateAction</td>
+                <td>コンテンツの作成（公開）日時を構造化データとして伝達</td>
+            </tr>
+            <tr>
+                <td>UpdateAction</td>
+                <td>コンテンツの最終更新日時を構造化データとして伝達</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="callout callout-tip">
+        <div class="callout-title">ヒント</div>
+        <p>CreateAction/UpdateAction のスキーマはGoogleの公式ドキュメントでも推奨されている構造です。コンテンツの鮮度をアピールすることで、検索結果での評価向上が期待できます。</p>
+    </div>
+
+    <nav class="page-nav">
+        <a href="setup.html" class="prev">&laquo; インストール・初期設定</a>
+        <a href="troubleshooting.html" class="next">トラブルシューティング &raquo;</a>
+    </nav>
+
+    <footer class="manual-footer">
+        <p>作者: <a href="https://www.tsuyoshikashiwazaki.jp/profile/" target="_blank" rel="noopener">柏崎剛（Tsuyoshi Kashiwazaki）</a></p>
+        <p>プラグイン: Kashiwazaki SEO Published &amp; Last Updated Dates v1.0.2</p>
+    </footer>
+</main>
+
+<div class="lightbox"></div>
+<script src="js/manual.js?v=1"></script>
+</body>
+</html>

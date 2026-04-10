@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インストール・初期設定 - Kashiwazaki SEO Published &amp; Last Updated Dates マニュアル</title>
+    <link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<button class="hamburger-btn" aria-label="メニュー">&#9776;</button>
+
+<nav class="sidebar">
+    <div class="sidebar-header">
+        <h2 style="color:#fff;">Published Dates</h2>
+        <span class="version">v1.0.2</span>
+        <img src="images/main-visual.png" alt="" style="width:100%;border-radius:4px;margin-top:8px;">
+    </div>
+    <ul>
+        <li><a href="index.html">概要</a></li>
+        <li class="active"><a href="setup.html">インストール・初期設定</a></li>
+        <li><a href="display-settings.html">詳細設定</a></li>
+        <li><a href="troubleshooting.html">トラブルシューティング</a></li>
+    </ul>
+</nav>
+
+<main class="content">
+    <h1>インストール・初期設定</h1>
+    <p class="lead">Kashiwazaki SEO Published &amp; Last Updated Dates のインストール方法と、日付表示に必要な基本設定を説明します。</p>
+
+    <h2>インストール手順</h2>
+
+    <div class="step">
+        <span class="step-number">1</span>
+        <div class="step-body">
+            <p>WordPress管理画面から <strong>プラグイン &gt; 新規追加</strong> に移動し、「Kashiwazaki SEO Published &amp; Last Updated Dates」を検索します。または、プラグインのZIPファイルを <strong>プラグイン &gt; 新規追加 &gt; プラグインのアップロード</strong> からアップロードします。</p>
+        </div>
+    </div>
+
+    <div class="step">
+        <span class="step-number">2</span>
+        <div class="step-body">
+            <p>「今すぐインストール」をクリックし、インストール完了後「有効化」をクリックします。</p>
+        </div>
+    </div>
+
+    <div class="step">
+        <span class="step-number">3</span>
+        <div class="step-body">
+            <p>管理画面の左メニューに「Kashiwazaki SEO Published &amp; Last Updated Dates」が追加されます。クリックして設定画面を開きます。</p>
+        </div>
+    </div>
+
+    <figure class="screenshot">
+        <img src="images/screenshots/00-menu-location.png" alt="管理画面メニューの位置" class="lightbox-trigger">
+        <figcaption>管理画面の左メニューにプラグインが追加されます</figcaption>
+    </figure>
+
+    <div class="callout callout-tip">
+        <div class="callout-title">ヒント</div>
+        <p>有効化直後から、デフォルト設定で公開日・更新日の表示とJSON-LD出力が自動的に開始されます。必要に応じて以下の設定を調整してください。</p>
+    </div>
+
+    <h2>基本設定</h2>
+
+    <h3>表示位置</h3>
+    <p>公開日・更新日をコンテンツのどの位置に表示するかを設定します。</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:35%;">表示位置</th>
+                <th>説明</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>コンテンツの前</td>
+                <td>記事本文の直前に日付を表示します。最も一般的な配置です。</td>
+            </tr>
+            <tr>
+                <td>コンテンツの後</td>
+                <td>記事本文の直後に日付を表示します。</td>
+            </tr>
+            <tr>
+                <td>コンテンツの前後</td>
+                <td>記事本文の前と後の両方に日付を表示します。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>投稿タイプ別設定</h3>
+    <p>日付を表示する投稿タイプを選択できます。投稿（post）、固定ページ（page）、カスタム投稿タイプごとに有効・無効を切り替えられます。</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:35%;">投稿タイプ</th>
+                <th>説明</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>投稿（post）</td>
+                <td>通常のブログ投稿。デフォルトで有効です。</td>
+            </tr>
+            <tr>
+                <td>固定ページ（page）</td>
+                <td>固定ページ。必要に応じて有効にします。</td>
+            </tr>
+            <tr>
+                <td>カスタム投稿タイプ</td>
+                <td>テーマやプラグインで追加されたカスタム投稿タイプ。個別に有効・無効を設定できます。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="callout callout-note">
+        <div class="callout-title">補足</div>
+        <p>固定ページは通常「更新日」の概念が薄いため、デフォルトでは無効になっています。会社概要やサービスページなど、更新頻度の高い固定ページがある場合は有効にすることを推奨します。</p>
+    </div>
+
+    <h3>デザインパターン</h3>
+    <p>日付表示のデザインを4種類のパターンから選択できます。</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:35%;">パターン名</th>
+                <th>説明</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>シンプル</td>
+                <td>テキストのみのシンプルな表示。どんなテーマにも調和します。</td>
+            </tr>
+            <tr>
+                <td>アイコン付き</td>
+                <td>カレンダーアイコン付きの表示。視認性が向上します。</td>
+            </tr>
+            <tr>
+                <td>バッジ</td>
+                <td>バッジスタイルの表示。更新日が目立つデザインです。</td>
+            </tr>
+            <tr>
+                <td>ラベル</td>
+                <td>ラベル付きの表示。公開日・更新日が明確に区別されます。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>JSON-LD構造化データ</h2>
+    <p>本プラグインは DigitalDocument + CreateAction + UpdateAction スキーマのJSON-LDを自動出力します。この機能はデフォルトで有効になっています。</p>
+
+    <p>出力されるJSON-LDの例:</p>
+    <pre><code>{
+  "@context": "https://schema.org",
+  "@type": "DigitalDocument",
+  "name": "記事タイトル",
+  "url": "https://example.com/post/",
+  "dateCreated": "2024-01-15",
+  "dateModified": "2024-06-20",
+  "potentialAction": [
+    {
+      "@type": "CreateAction",
+      "startTime": "2024-01-15"
+    },
+    {
+      "@type": "UpdateAction",
+      "startTime": "2024-06-20"
+    }
+  ]
+}</code></pre>
+
+    <div class="callout callout-tip">
+        <div class="callout-title">ヒント</div>
+        <p>JSON-LDの出力は <a href="https://search.google.com/test/rich-results" target="_blank" rel="noopener">Googleリッチリザルトテスト</a> や <a href="https://validator.schema.org/" target="_blank" rel="noopener">Schema.org Validator</a> で確認できます。</p>
+    </div>
+
+    <nav class="page-nav">
+        <a href="index.html" class="prev">&laquo; 概要</a>
+        <a href="display-settings.html" class="next">詳細設定 &raquo;</a>
+    </nav>
+
+    <footer class="manual-footer">
+        <p>作者: <a href="https://www.tsuyoshikashiwazaki.jp/profile/" target="_blank" rel="noopener">柏崎剛（Tsuyoshi Kashiwazaki）</a></p>
+        <p>プラグイン: Kashiwazaki SEO Published &amp; Last Updated Dates v1.0.2</p>
+    </footer>
+</main>
+
+<div class="lightbox"></div>
+<script src="js/manual.js?v=1"></script>
+</body>
+</html>
