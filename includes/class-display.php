@@ -24,7 +24,6 @@ class KSPLUD_Display {
         add_filter('the_content', array($this, 'add_dates_to_content'), 10);
         add_action('wp_head', array($this, 'output_custom_css'));
         add_action('template_redirect', array($this, 'add_last_modified_header'));
-        add_action('pre_get_posts', array($this, 'fix_query_conflicts'), 1);
     }
 
     public function add_dates_to_content($content) {
@@ -66,45 +65,28 @@ class KSPLUD_Display {
         }
     }
 
-    private function find_post_by_current_url() {
-        // 現在のURLパスを取得
-        $request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
-        if (empty($request_uri)) {
-            return null;
+    /**
+     * 投稿の公開・更新の本物の Unix 時刻 (UTC) を返す
+     *
+     * get_the_date('U') / get_the_modified_date('U') はサイトのタイムゾーン分を足した値を返すため使わない。
+     */
+    public static function get_post_unix_time($post_id, $type) {
+        $time = $type === 'updated'
+            ? get_post_modified_time('U', true, $post_id)
+            : get_post_time('U', true, $post_id);
+
+        return $time === false ? false : (int) $time;
+    }
+
+    /**
+     * 本物の Unix 時刻をサイトのタイムゾーンの ISO 8601 (datetime 属性用) にする
+     */
+    public static function format_iso8601($timestamp) {
+        if (function_exists('wp_date')) {
+            return wp_date('c', $timestamp);
         }
 
-        // クエリストリングを除去
-        $path = parse_url($request_uri, PHP_URL_PATH);
-        $path = trim($path, '/');
-
-        // パスの最後のセグメントをスラグとして取得
-        $segments = explode('/', $path);
-        $slug = end($segments);
-
-        if (empty($slug)) {
-            return null;
-        }
-
-        // 有効化された投稿タイプで検索
-        $enabled_post_types = $this->settings->get_enabled_post_types();
-
-        $args = array(
-            'post_type' => $enabled_post_types,
-            'name' => $slug,
-            'post_status' => 'publish',
-            'posts_per_page' => 1,
-            'no_found_rows' => true,
-            'update_post_meta_cache' => false,
-            'update_post_term_cache' => false,
-        );
-
-        $query = new WP_Query($args);
-
-        if ($query->have_posts()) {
-            return $query->posts[0];
-        }
-
-        return null;
+        return gmdate('c', $timestamp);
     }
 
     public function get_dates_html($post_id = null) {
@@ -115,8 +97,8 @@ class KSPLUD_Display {
         $published_date = get_the_date($this->settings->get_date_format(), $post_id);
         $modified_date = get_the_modified_date($this->settings->get_date_format(), $post_id);
 
-        $published_time = get_the_date('U', $post_id);
-        $modified_time = get_the_modified_date('U', $post_id);
+        $published_time = self::get_post_unix_time($post_id, 'published');
+        $modified_time = self::get_post_unix_time($post_id, 'updated');
 
         $current_post_type = get_post_type($post_id);
         $show_published = $this->settings->should_show_published_for_post_type($current_post_type);
@@ -124,22 +106,27 @@ class KSPLUD_Display {
         $hide_if_not_modified = $this->settings->get_option('hide_if_not_modified', true);
         $threshold = $this->settings->get_option('modified_threshold', 86400);
 
-        // 更新日の表示条件を判定
-        $should_show_updated = $show_updated && $modified_date !== $published_date;
+        // 更新日の表示条件を判定 (表示用の文字列ではなく実際の時刻で比べる)
+        $should_show_updated = $show_updated && $modified_time > $published_time;
         if ($hide_if_not_modified && ($modified_time - $published_time) < $threshold) {
             $should_show_updated = false;
         }
 
-        // 何も表示されない場合のフォールバック処理
-        $use_published_fallback = false;
+        // 表示する日付が無いとき
         if (!$show_published && !$should_show_updated) {
-            $use_published_fallback = true;
+            // 公開日も更新日も表示しない設定なら何も出さない
+            if (!$show_updated) {
+                return '';
+            }
+            // 更新日だけを表示する設定で、更新日が表示条件で隠れたときは、従来どおり日付を 1 つ出す。
+            // 出すのは実際の最終更新日時 (未更新の投稿では公開日時と同じ) で、ラベルと dateModified に合う値にする
+            $should_show_updated = true;
         }
 
-                $design_pattern = $this->settings->get_option('design_pattern', 'badge');
+        $design_pattern = $this->settings->get_option('design_pattern', 'badge');
 
         // 両方の日付が表示されるかチェック
-        $both_dates_visible = ($show_published || $use_published_fallback) && $should_show_updated;
+        $both_dates_visible = $show_published && $should_show_updated;
         $both_dates_class = $both_dates_visible ? ' ksplud-both-dates' : '';
 
         // 日付情報のコンテナ（Article全体ではなく日付部分のみ）
@@ -150,11 +137,9 @@ class KSPLUD_Display {
             $html .= $this->get_single_date_html('updated', $modified_date, $modified_time, $both_dates_visible);
         }
 
-        // 公開日の表示（通常時またはフォールバック時）
-        if ($show_published || $use_published_fallback) {
-            // フォールバック時は更新日ラベルを使用
-            $date_type = $use_published_fallback ? 'updated' : 'published';
-            $html .= $this->get_single_date_html($date_type, $published_date, $published_time, $both_dates_visible);
+        // 公開日の表示
+        if ($show_published) {
+            $html .= $this->get_single_date_html('published', $published_date, $published_time, $both_dates_visible);
         }
 
         $html .= '</div>';
@@ -169,14 +154,12 @@ class KSPLUD_Display {
             : $this->settings->get_option('updated_text', '更新日');
 
         $icon = $this->get_icon($type);
-        $datetime = date('c', $timestamp);
+        // $timestamp は本物の Unix 時刻 (get_post_unix_time の値)
+        $datetime = self::format_iso8601($timestamp);
 
         // カスタム要素のタグ名を決定
         $custom_tag = $type === 'published' ? 'published-date' : 'updated-date';
-
-        // microdata用の属性
-        $schema_prop = $type === 'published' ? 'datePublished' : 'dateModified';
-        $microdata_attrs = 'itemprop="' . esc_attr($schema_prop) . '" itemscope itemtype="https://schema.org/DateTime"';
+        // 構造化データは JSON-LD (KSPLUD_Schema) で出力するため、ここでは microdata の属性を付けない
 
                 // カラー設定を取得してインラインスタイルで確実に適用
         // 統一されたdate_colorを使用し、公開日は両方表示時のみ薄く表示
@@ -208,17 +191,17 @@ class KSPLUD_Display {
         switch ($style) {
             case 'icon_only':
                 $html .= '<span class="ksplud-icon" title="' . esc_attr($text) . '">' . $icon . '</span>';
-                $html .= '<' . $custom_tag . ' datetime="' . esc_attr($datetime) . '" ' . $microdata_attrs . ' ' . $inline_style . '>' . esc_html($date) . '</' . $custom_tag . '>';
+                $html .= '<' . $custom_tag . ' datetime="' . esc_attr($datetime) . '" ' . $inline_style . '>' . esc_html($date) . '</' . $custom_tag . '>';
                 break;
             case 'text_only':
                 $html .= '<span class="ksplud-label">' . esc_html($text) . ':</span>';
-                $html .= '<' . $custom_tag . ' datetime="' . esc_attr($datetime) . '" ' . $microdata_attrs . ' ' . $inline_style . '>' . esc_html($date) . '</' . $custom_tag . '>';
+                $html .= '<' . $custom_tag . ' datetime="' . esc_attr($datetime) . '" ' . $inline_style . '>' . esc_html($date) . '</' . $custom_tag . '>';
                 break;
             case 'icon_text':
             default:
                 $html .= '<span class="ksplud-icon">' . $icon . '</span>';
                 $html .= '<span class="ksplud-label">' . esc_html($text) . ':</span>';
-                $html .= '<' . $custom_tag . ' datetime="' . esc_attr($datetime) . '" ' . $microdata_attrs . ' ' . $inline_style . '>' . esc_html($date) . '</' . $custom_tag . '>';
+                $html .= '<' . $custom_tag . ' datetime="' . esc_attr($datetime) . '" ' . $inline_style . '>' . esc_html($date) . '</' . $custom_tag . '>';
                 break;
         }
 
@@ -277,48 +260,12 @@ class KSPLUD_Display {
         // カスタムCSS
         if (!empty($custom_css)) {
             echo '/* Custom CSS */' . "\n";
-            echo esc_html($custom_css) . "\n";
+            // <style> の中は HTML の実体参照が解釈されないため esc_html は使わない (> や引用符が壊れる)。
+            // タグだけを取り除き、</style> で抜け出せないようにする
+            echo wp_strip_all_tags($custom_css) . "\n";
         }
 
         echo '</style>' . "\n";
-    }
-
-    public function fix_query_conflicts($query) {
-        // メインクエリのみ処理
-        if (!$query->is_main_query() || is_admin()) {
-            return;
-        }
-
-        // カスタム投稿タイプのアーカイブページの場合はスキップ
-        // アーカイブページを誤って個別記事に変換しないようにする
-        if ($query->is_post_type_archive()) {
-            return;
-        }
-
-        // カテゴリ、タグ、タクソノミーアーカイブ、日付アーカイブなどもスキップ
-        if ($query->is_archive() || $query->is_category() || $query->is_tag() || $query->is_tax() || $query->is_date()) {
-            return;
-        }
-
-        // is_singularでない場合に同名の個別記事が存在するかチェック
-        if (!$query->is_singular) {
-            $found_post = $this->find_post_by_current_url();
-
-            if ($found_post && $this->settings->is_enabled_for_post_type($found_post->post_type)) {
-                // アーカイブクエリを個別記事クエリに変更
-                $query->init();
-                $query->is_singular = true;
-                $query->is_single = ($found_post->post_type === 'post');
-                $query->is_page = ($found_post->post_type === 'page');
-                $query->is_archive = false;
-                $query->is_post_type_archive = false;
-                $query->set('p', $found_post->ID);
-                $query->set('post_type', $found_post->post_type);
-                $query->set('name', '');
-                $query->queried_object = $found_post;
-                $query->queried_object_id = $found_post->ID;
-            }
-        }
     }
 
     public function add_last_modified_header() {
@@ -332,7 +279,8 @@ class KSPLUD_Display {
         }
 
         $post_id = get_the_ID();
-        $modified_time = get_the_modified_date('U', $post_id);
+        // HTTP の日付は GMT で表すため、本物の Unix 時刻 (UTC) を使う
+        $modified_time = self::get_post_unix_time($post_id, 'updated');
 
         if ($modified_time) {
             $last_modified = gmdate('D, d M Y H:i:s', $modified_time) . ' GMT';
@@ -373,7 +321,7 @@ class KSPLUD_Display {
 
         $instance = self::get_instance();
         $published_date = get_the_date($instance->settings->get_date_format(), $post_id);
-        $published_time = get_the_date('U', $post_id);
+        $published_time = self::get_post_unix_time($post_id, 'published');
 
         $html = $instance->get_single_date_html('published', $published_date, $published_time, false);
 
@@ -391,7 +339,7 @@ class KSPLUD_Display {
 
         $instance = self::get_instance();
         $modified_date = get_the_modified_date($instance->settings->get_date_format(), $post_id);
-        $modified_time = get_the_modified_date('U', $post_id);
+        $modified_time = self::get_post_unix_time($post_id, 'updated');
 
         $current_post_type = get_post_type($post_id);
         $show_updated = $instance->settings->should_show_updated_for_post_type($current_post_type);
@@ -399,7 +347,7 @@ class KSPLUD_Display {
         $threshold = $instance->settings->get_option('modified_threshold', 86400);
 
         if ($hide_if_not_modified) {
-            $published_time = get_the_date('U', $post_id);
+            $published_time = self::get_post_unix_time($post_id, 'published');
             if (($modified_time - $published_time) < $threshold) {
                 if ($echo) {
                     return;

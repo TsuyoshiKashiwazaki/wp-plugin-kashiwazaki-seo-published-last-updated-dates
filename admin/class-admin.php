@@ -109,18 +109,14 @@ class KSPLUD_Admin {
                                 <th scope="row"><?php _e('対象投稿タイプ', 'kashiwazaki-seo-published-last-updated-dates'); ?></th>
                                 <td>
                                     <?php
-                                    $post_type_settings = isset($options['post_type_settings']) ? $options['post_type_settings'] : array();
 
                                     foreach ($post_types as $post_type) :
                                         if ($post_type->name === 'attachment') continue;
 
                                         $is_enabled = in_array($post_type->name, $options['post_types']);
-                                        $show_published = isset($post_type_settings[$post_type->name]['show_published'])
-                                            ? $post_type_settings[$post_type->name]['show_published']
-                                            : true;
-                                        $show_updated = isset($post_type_settings[$post_type->name]['show_updated'])
-                                            ? $post_type_settings[$post_type->name]['show_updated']
-                                            : true;
+                                        // フロントの表示と同じ判定で初期値を決める (投稿タイプ別の設定が無ければ全体設定にフォールバック)
+                                        $show_published = $this->settings->should_show_published_for_post_type($post_type->name);
+                                        $show_updated = $this->settings->should_show_updated_for_post_type($post_type->name);
                                     ?>
                                         <div class="ksplud-post-type-item" style="margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
                                             <label style="display: block; margin-bottom: 8px; font-weight: bold;">
@@ -135,6 +131,13 @@ class KSPLUD_Admin {
                                             <div class="ksplud-post-type-settings"
                                                  data-post-type="<?php echo esc_attr($post_type->name); ?>"
                                                  style="margin-left: 24px; <?php echo $is_enabled ? '' : 'display: none;'; ?>">
+                                                <?php // チェックを外したときも 0 が送られるようにする (両方外した状態を保存できるように) ?>
+                                                <input type="hidden"
+                                                       name="ksplud_settings[post_type_settings][<?php echo esc_attr($post_type->name); ?>][show_published]"
+                                                       value="0">
+                                                <input type="hidden"
+                                                       name="ksplud_settings[post_type_settings][<?php echo esc_attr($post_type->name); ?>][show_updated]"
+                                                       value="0">
                                                 <label style="display: block; margin-bottom: 5px;">
                                                     <input type="checkbox"
                                                            name="ksplud_settings[post_type_settings][<?php echo esc_attr($post_type->name); ?>][show_published]"
@@ -361,9 +364,11 @@ class KSPLUD_Admin {
             }
         }
 
-        // 後方互換性のためのレガシー設定も保持
-        $sanitized['show_published'] = isset($input['show_published']) && $input['show_published'] == '1';
-        $sanitized['show_updated'] = isset($input['show_updated']) && $input['show_updated'] == '1';
+        // 後方互換性のためのレガシー設定 (投稿タイプ別の設定が無い投稿タイプの既定値)。
+        // 設定画面にはこの入力が無いので、送られないときは既定の「表示する」にする
+        // (以前は保存のたびに false になり、後から増えた投稿タイプで日付が表示されなくなっていた)
+        $sanitized['show_published'] = isset($input['show_published']) ? $input['show_published'] == '1' : true;
+        $sanitized['show_updated'] = isset($input['show_updated']) ? $input['show_updated'] == '1' : true;
         $sanitized['published_text'] = isset($input['published_text']) ? sanitize_text_field($input['published_text']) : '公開日';
         $sanitized['updated_text'] = isset($input['updated_text']) ? sanitize_text_field($input['updated_text']) : '更新日';
         $sanitized['date_color'] = isset($input['date_color']) ? sanitize_hex_color($input['date_color']) : '#0ea5e9';

@@ -12,7 +12,7 @@
 <nav class="sidebar">
     <div class="sidebar-header">
         <h2 style="color:#fff;">Published Dates</h2>
-        <span class="version">v1.0.2</span>
+        <span class="version">v1.0.3</span>
         <img src="images/main-visual.png" alt="" style="width:100%;border-radius:4px;margin-top:8px;">
     </div>
     <ul>
@@ -68,11 +68,11 @@
         <tbody>
             <tr>
                 <td>テーマのCSSとの競合</td>
-                <td>カスタムHTML要素はShadow DOMでスタイルをカプセル化していますが、一部のテーマではグローバルスタイルが影響する場合があります。設定画面で色・フォントを調整してください。</td>
+                <td>日付の見た目はプラグインの CSS で整えていますが、テーマのグローバルなスタイルが影響する場合があります。設定画面の「日付の色」「デザインパターン」を変えるか、「カスタムCSS」でテーマより強いセレクタのスタイルを指定してください（フォントの設定項目はありません）。</td>
             </tr>
             <tr>
                 <td>ブラウザがカスタム要素をサポートしていない</td>
-                <td>カスタムHTML要素はIE11ではサポートされません。モダンブラウザ（Chrome、Firefox、Safari、Edge）で確認してください。</td>
+                <td>カスタム要素は IE11 ではサポートされません（日付の文字は表示されます）。モダンブラウザ（Chrome、Firefox、Safari、Edge）で確認してください。</td>
             </tr>
         </tbody>
     </table>
@@ -107,8 +107,8 @@
         </thead>
         <tbody>
             <tr>
-                <td>投稿が一度も更新されていない</td>
-                <td>公開後に一度も編集・更新されていない投稿では、更新日が公開日と同一のため表示が省略される場合があります。</td>
+                <td>投稿が更新されていない・公開直後の更新</td>
+                <td>公開後に更新されていない投稿では、更新日は表示されません。設定画面の「公開直後の場合は更新日を表示しない」がオンのときは、公開から 24 時間以内の更新も表示されません（「更新日を表示」だけを選んだ投稿タイプでは、代わりに最終更新日時を 1 つ表示します）。</td>
             </tr>
             <tr>
                 <td>更新日の表示設定が無効</td>
@@ -138,7 +138,7 @@
             </tr>
             <tr>
                 <td>PHP</td>
-                <td>7.4 以上</td>
+                <td>7.2 以上</td>
             </tr>
             <tr>
                 <td>対応ブラウザ</td>
@@ -155,7 +155,8 @@
         <li><strong>外部通信:</strong> なし</li>
         <li><strong>Cronイベント:</strong> なし</li>
         <li><strong>メール送信:</strong> なし</li>
-        <li><strong>フロントエンド:</strong> CSS 8.4KB、JS 5.4KB（カスタム要素定義）</li>
+        <li><strong>フロントエンド:</strong> CSS 約 8.5KB、JS 約 5.5KB（カスタム要素定義）</li>
+        <li><strong>HTTP ヘッダー:</strong> 対象の個別ページに Last-Modified を出力</li>
     </ul>
 
     <h2>アーキテクチャ</h2>
@@ -164,9 +165,9 @@
 
     <h3>フロントエンド</h3>
     <ul>
-        <li>カスタムHTML要素 <code>&lt;ksplud-date&gt;</code> で日付を表示（Shadow DOMでスタイルカプセル化）</li>
-        <li>CSS（8.4KB）で4種類のデザインパターンを実装</li>
-        <li>JavaScript（5.4KB）でカスタム要素の定義と初期化を実行</li>
+        <li>サーバーが出力する HTML では、日付をカスタム要素 <code>&lt;published-date&gt;</code> / <code>&lt;updated-date&gt;</code> で囲む（<code>datetime</code> 属性にサイトのタイムゾーン付きの日時）</li>
+        <li>CSS（約 8.5KB）で4種類のデザインパターンを実装</li>
+        <li>JavaScript（約 5.5KB）は、カスタム要素を定義したうえで、ページの読み込みの約 0.1 秒後に <code>&lt;published-date&gt;</code> / <code>&lt;updated-date&gt;</code> を <code>&lt;span class="ksplud-published-date-fallback"&gt;</code> / <code>&lt;span class="ksplud-updated-date-fallback"&gt;</code> に置き換える（日時は <code>data-datetime</code> 属性に移る）。ブラウザの開発者ツールで見える表示後の要素はこの span です</li>
         <li>DigitalDocument + CreateAction/UpdateAction JSON-LD を <code>&lt;head&gt;</code> 内にインライン出力</li>
     </ul>
 
@@ -196,7 +197,7 @@
     <div class="step">
         <span class="step-number">3</span>
         <div class="step-body">
-            <p>投稿の公開日・更新日を取得し、設定に基づいて <code>&lt;ksplud-date&gt;</code> カスタム要素を生成します。</p>
+            <p>投稿の公開日・更新日を取得し、設定に基づいて <code>&lt;published-date&gt;</code> / <code>&lt;updated-date&gt;</code> を含む HTML を生成します。</p>
         </div>
     </div>
 
@@ -210,13 +211,13 @@
     <div class="step">
         <span class="step-number">5</span>
         <div class="step-body">
-            <p>同時に <code>wp_head</code> アクションで DigitalDocument + CreateAction/UpdateAction のJSON-LDを出力します。</p>
+            <p>同時に <code>wp_head</code> アクションで DigitalDocument + CreateAction/UpdateAction の JSON-LD を、<code>template_redirect</code> アクションで Last-Modified ヘッダーを出力します。</p>
         </div>
     </div>
 
     <div class="callout callout-note">
         <div class="callout-title">補足</div>
-        <p>カスタムテーブルやCronイベントは使用しないため、プラグインの削除時にデータベースに不要なデータが残ることはありません。<code>wp_options</code> の設定値のみが削除対象です。</p>
+        <p>カスタムテーブルや Cron イベントは使用しません。データベースに保存するのは <code>wp_options</code> の <code>ksplud_settings</code> だけです。プラグインを削除してもこの設定値は自動では消えないので、完全に消したい場合は手動で削除してください（再インストール時は保存済みの設定が使われます）。</p>
     </div>
 
     <nav class="page-nav">
@@ -226,7 +227,7 @@
 
     <footer class="manual-footer">
         <p>作者: <a href="https://www.tsuyoshikashiwazaki.jp/profile/" target="_blank" rel="noopener">柏崎剛（Tsuyoshi Kashiwazaki）</a></p>
-        <p>プラグイン: Kashiwazaki SEO Published &amp; Last Updated Dates v1.0.2</p>
+        <p>プラグイン: Kashiwazaki SEO Published &amp; Last Updated Dates v1.0.3</p>
     </footer>
 </main>
 

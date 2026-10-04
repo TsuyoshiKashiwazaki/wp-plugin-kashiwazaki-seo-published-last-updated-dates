@@ -3,74 +3,77 @@
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-7.2%2B-purple.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/License-GPL--2.0--or--later-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
-[![Version](https://img.shields.io/badge/Version-1.0.2-orange.svg)](https://github.com/TsuyoshiKashiwazaki/wp-plugin-kashiwazaki-seo-published-last-updated-dates/releases)
+[![Version](https://img.shields.io/badge/Version-1.0.3-orange.svg)](https://github.com/TsuyoshiKashiwazaki/wp-plugin-kashiwazaki-seo-published-last-updated-dates/releases)
 
-A WordPress SEO plugin that automatically displays published and last updated dates for posts and pages. Features include responsive design with horizontal layout, shortcode support, PHP functions for theme integration, non-conflicting DigitalDocument schema markup, Last-Modified HTTP headers, and customizable styling options.
+投稿や固定ページの公開日と更新日を自動で表示する、WordPress の SEO 対策プラグインです。横並びのレスポンシブなデザイン、ショートコード、テーマに組み込むための PHP 関数、既存のマークアップとぶつからない DigitalDocument 形式の構造化データ、HTTP の Last-Modified ヘッダー、表示スタイルの細かな設定を備えています。
 
-> **Enhance your SEO with clear date display and structured data that doesn't conflict with existing markup**
+> **日付をはっきり表示し、既存のマークアップとぶつからない構造化データで SEO を強化します**
 
-## Key Features
+## 主な機能
 
-- **Automatic Date Display** - Shows published and updated dates before/after posts with beautiful horizontal layout
-- **Non-conflicting Schema Markup** - Uses DigitalDocument format to avoid conflicts with existing structured data
-- **Multiple Integration Methods** - Shortcodes, PHP functions, and automatic display
-- **Responsive Design** - Horizontal layout on desktop, vertical on mobile
-- **Last-Modified Headers** - Automatically outputs HTTP Last-Modified headers for better SEO
-- **Customizable Styling** - Choose from icon+text, text-only, or icon-only display styles
-- **Flexible Post Type Support** - Works with posts, pages, and custom post types
-- **Custom Date Formats** - Fully customizable date formatting options
+- **日付の自動表示** - 記事の前後に、公開日と更新日を横並びで表示します
+- **ぶつからない構造化データ** - DigitalDocument 形式を使い、既存の構造化データと競合しません
+- **いろいろな組み込み方** - ショートコード、PHP 関数、自動表示に対応します
+- **レスポンシブデザイン** - パソコンでは横並び、スマートフォンでは縦並びになります
+- **Last-Modified ヘッダー** - HTTP の Last-Modified ヘッダーを自動で出力します
+- **表示スタイルの選択** - アイコン + テキスト、テキストのみ、アイコンのみから選べます
+- **投稿タイプごとの設定** - 投稿・固定ページ・カスタム投稿タイプごとに、公開日・更新日の表示を切り替えられます
+- **日付の書式** - 日付の書式を自由に設定できます
 
-## Quick Start
+## はじめかた
 
-### Installation
+### インストール
 
-1. Upload the plugin folder to `/wp-content/plugins/`
-2. Activate the plugin through the WordPress admin panel
-3. Navigate to the plugin settings page to configure display options
+1. プラグインのフォルダを `/wp-content/plugins/` にアップロードします
+2. WordPress の管理画面でプラグインを有効化します
+3. プラグインの設定画面で表示の設定をします
 
-### Basic Usage
+### 基本的な使い方
 
-The plugin automatically displays dates based on your settings. You can also use:
+設定に従って日付が自動で表示されます。次の方法でも表示できます。
 
-**Shortcodes:**
+**ショートコード:**
 ```
-[published_date] - Display published date
-[updated_date] - Display updated date
-[publish_update_dates] - Display both dates
+[published_date] - 公開日を表示
+[updated_date] - 更新日を表示
+[publish_update_dates] - 両方の日付を表示
 ```
 
-**PHP Functions:**
+**PHP 関数:**
 ```php
 <?php KSPLUD_Display::display_both_dates(); ?>
 <?php echo KSPLUD_Display::get_published_date(null, 'Y-m-d'); ?>
 ```
 
-## Shortcode Parameters
+## ショートコードの属性
 
 ### published_date / updated_date
-- `format` - Date format (e.g., format="Y/m/d")
-- `icon` - Show/hide icon (e.g., icon="false")
-- `label` - Label text (e.g., label="Posted on")
-- `class` - Additional CSS class (e.g., class="my-custom-date")
+- `format` - 日付の書式 (例: format="Y/m/d")
+- `icon` - アイコンの表示・非表示 (例: icon="false")
+- `label` - ラベルの文字 (例: label="投稿日")
+- `class` - 追加する CSS クラス (例: class="my-custom-date")
+
+### updated_date のみ
+- `hide_if_not_modified` - 公開から 24 時間以内の更新を表示しない (例: hide_if_not_modified="false")。省略すると設定画面の「公開直後の場合は更新日を表示しない」に従います
 
 ### publish_update_dates
-- `separator` - Separator character (e.g., separator=" | ")
-- `wrapper_class` - Wrapper CSS class (e.g., wrapper_class="date-container")
+- `separator` - 区切りの文字 (例: separator=" | ")
+- `wrapper_class` - 全体を囲む要素の CSS クラス (例: wrapper_class="date-container")
 
-## PHP Functions
+## PHP 関数
 
-**Display with HTML:**
+**HTML 付きで表示:**
 - `KSPLUD_Display::display_published_date($post_id, $echo)`
 - `KSPLUD_Display::display_updated_date($post_id, $echo)`
 - `KSPLUD_Display::display_both_dates($post_id, $echo)`
 
-**Get text only:**
+**日付の文字だけを取得:**
 - `KSPLUD_Display::get_published_date($post_id, $format)`
 - `KSPLUD_Display::get_updated_date($post_id, $format)`
 
-## Structured Data Format
+## 構造化データの形式
 
-This plugin uses a unique **DigitalDocument + CreateAction + UpdateAction** schema that doesn't conflict with existing Article, BlogPosting, or WebPage markup:
+このプラグインは、既存の Article・BlogPosting・WebPage のマークアップとぶつからない **DigitalDocument + CreateAction + UpdateAction** の形式で出力します。
 
 ```json
 {
@@ -86,60 +89,38 @@ This plugin uses a unique **DigitalDocument + CreateAction + UpdateAction** sche
 }
 ```
 
-## Technical Requirements
+## 動作環境
 
-- **WordPress**: 5.0 or higher
-- **PHP**: 7.2 or higher
-- **License**: GPL v2.0 or later
+- **WordPress**: 5.0 以上
+- **PHP**: 7.2 以上
+- **ライセンス**: GPL v2.0 以降
 
-## Changelog
+## ライセンス
 
-### Version 1.0.2 - 2025-11-26
-- **Fixed**: Fix query conflict logic to not convert post type archive pages to single posts
-- **Improved**: Skip archive pages (post type archive, category, tag, taxonomy, date) in fix_query_conflicts()
+このプラグインは GPL v2.0 以降のライセンスで提供しています。
 
-### Version 1.0.1 - 2025-11-05
-- **Improved**: Enhanced post type settings UI by integrating per-post-type display settings into target post types section
-- **Improved**: Added HTML comment signatures around Schema.org markup output for easier identification
-- **Fixed**: Optimized query processing for URL conflicts
+## サポート・開発者
 
-### Version 1.0.0 - 2025-09-22
-- Initial release
-- Automatic date display functionality
-- Three shortcode types
-- PHP function support for direct calls
-- Non-conflicting structured data (DigitalDocument format)
-- Last-Modified header automatic output
-- Responsive horizontal layout design
-- Comprehensive admin settings panel
-- Custom CSS support
+**開発者**: 柏崎剛 (Tsuyoshi Kashiwazaki)
+**ウェブサイト**: https://www.tsuyoshikashiwazaki.jp/
+**サポート**: ご質問や不具合の報告は、開発者のウェブサイトからお寄せください。
 
-## License
+## 開発への参加
 
-This plugin is licensed under the GPL v2.0 or later.
+Issue や Pull Request を歓迎します。
 
-## Support & Developer
+1. リポジトリをフォークする
+2. 作業用のブランチを作る
+3. 変更をコミットする
+4. ブランチをプッシュする
+5. Pull Request を作る
 
-**Developer**: 柏崎剛 (Tsuyoshi Kashiwazaki)
-**Website**: https://www.tsuyoshikashiwazaki.jp/
-**Support**: For questions or bug reports, please visit the developer's website.
+## サポート
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit issues or pull requests.
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a Pull Request
-
-## Support
-
-For support, please visit the developer's website or create an issue in this repository.
+開発者のウェブサイトか、このリポジトリの Issue からお問い合わせください。
 
 ---
 
-**Keywords**: SEO, WordPress, published date, updated date, last modified, schema markup, structured data, responsive design
+**キーワード**: SEO, WordPress, 公開日, 更新日, 最終更新日, 構造化データ, スキーママークアップ, レスポンシブデザイン
 
 Made by [Tsuyoshi Kashiwazaki](https://github.com/TsuyoshiKashiwazaki)

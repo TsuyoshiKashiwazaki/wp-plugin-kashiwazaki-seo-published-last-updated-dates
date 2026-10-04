@@ -42,8 +42,8 @@ class KSPLUD_Shortcode {
         $settings = KSPLUD_Settings::get_instance();
         $format = !empty($atts['format']) ? $atts['format'] : $settings->get_date_format();
         $date = get_the_date($format, $post_id);
-        $timestamp = get_the_date('U', $post_id);
-        $datetime = date('c', $timestamp);
+        $timestamp = KSPLUD_Display::get_post_unix_time($post_id, 'published');
+        $datetime = KSPLUD_Display::format_iso8601($timestamp);
 
         $label = !empty($atts['label']) ? $atts['label'] : $settings->get_option('published_text', '公開日');
         $show_icon = filter_var($atts['icon'], FILTER_VALIDATE_BOOLEAN);
@@ -70,7 +70,8 @@ class KSPLUD_Shortcode {
             'icon' => 'true',
             'label' => '',
             'class' => '',
-            'hide_if_not_modified' => 'true'
+            // 省略時は設定画面の「公開直後の場合は更新日を表示しない」に従う
+            'hide_if_not_modified' => ''
         ), $atts, 'updated_date');
 
         $post_id = get_the_ID();
@@ -80,9 +81,17 @@ class KSPLUD_Shortcode {
 
         $settings = KSPLUD_Settings::get_instance();
 
-        if (filter_var($atts['hide_if_not_modified'], FILTER_VALIDATE_BOOLEAN)) {
-            $published_time = get_the_date('U', $post_id);
-            $modified_time = get_the_modified_date('U', $post_id);
+        $hide_if_not_modified = null;
+        if ($atts['hide_if_not_modified'] !== '') {
+            $hide_if_not_modified = filter_var($atts['hide_if_not_modified'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        }
+        if (null === $hide_if_not_modified) {
+            $hide_if_not_modified = (bool) $settings->get_option('hide_if_not_modified', true);
+        }
+
+        if ($hide_if_not_modified) {
+            $published_time = KSPLUD_Display::get_post_unix_time($post_id, 'published');
+            $modified_time = KSPLUD_Display::get_post_unix_time($post_id, 'updated');
             $threshold = $settings->get_option('modified_threshold', 86400);
 
             if (($modified_time - $published_time) < $threshold) {
@@ -92,8 +101,8 @@ class KSPLUD_Shortcode {
 
         $format = !empty($atts['format']) ? $atts['format'] : $settings->get_date_format();
         $date = get_the_modified_date($format, $post_id);
-        $timestamp = get_the_modified_date('U', $post_id);
-        $datetime = date('c', $timestamp);
+        $timestamp = KSPLUD_Display::get_post_unix_time($post_id, 'updated');
+        $datetime = KSPLUD_Display::format_iso8601($timestamp);
 
         $label = !empty($atts['label']) ? $atts['label'] : $settings->get_option('updated_text', '更新日');
         $show_icon = filter_var($atts['icon'], FILTER_VALIDATE_BOOLEAN);

@@ -12,7 +12,7 @@
 <nav class="sidebar">
     <div class="sidebar-header">
         <h2 style="color:#fff;">Published Dates</h2>
-        <span class="version">v1.0.2</span>
+        <span class="version">v1.0.3</span>
         <img src="images/main-visual.png" alt="" style="width:100%;border-radius:4px;margin-top:8px;">
     </div>
     <ul>
@@ -25,16 +25,100 @@
 
 <main class="content">
     <h1>詳細設定</h1>
-    <p class="lead">デザインカスタマイズ、色・フォント設定、カスタムHTML要素の仕組みなど、Kashiwazaki SEO Published &amp; Last Updated Dates の詳細な設定項目を解説します。</p>
+    <p class="lead">設定画面の各項目、出力される HTML、構造化データ (JSON-LD)、ショートコードと PHP 関数など、Kashiwazaki SEO Published &amp; Last Updated Dates の詳細を解説します。</p>
 
-    <h2>色のカスタマイズ</h2>
+    <h2>設定画面の項目</h2>
 
-    <p>日付表示の色を細かくカスタマイズできます。テーマのデザインに合わせて調整してください。</p>
+    <p>管理画面の左メニュー「Kashiwazaki SEO Published &amp; Last Updated Dates」から開く設定画面には、次の項目があります。</p>
 
     <figure class="screenshot">
-        <img src="images/screenshots/02-pubdates-detail.png" alt="日付表示設定" class="lightbox-trigger">
-        <figcaption>公開日・更新日の表示設定</figcaption>
+        <img src="images/screenshots/02-pubdates-detail.png" alt="設定画面" class="lightbox-trigger">
+        <figcaption>設定画面 (撮影は v1.0.2。v1.0.3 では「更新日の表示条件」の行が表示されます)</figcaption>
     </figure>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:30%;">設定項目</th>
+                <th>説明</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>表示位置</td>
+                <td>記事の前 / 記事の後 / 記事の前後両方 / 自動表示しない（ショートコードのみ）から選びます。</td>
+            </tr>
+            <tr>
+                <td>対象投稿タイプ</td>
+                <td>日付を表示する投稿タイプにチェックを入れます。チェックした投稿タイプごとに「公開日を表示」「更新日を表示」を選べます。両方を外すと、その投稿タイプでは日付を表示しません（構造化データと Last-Modified ヘッダーは出力されます）。</td>
+            </tr>
+            <tr>
+                <td>表示スタイル</td>
+                <td>アイコン + テキスト / アイコンのみ / テキストのみ から選びます。</td>
+            </tr>
+            <tr>
+                <td>日付フォーマット</td>
+                <td>PHP の日付フォーマットで指定します（既定は <code>Y年n月j日</code>）。WordPress の「設定 &gt; 一般」の日付形式ではなく、ここで指定した形式が使われます。</td>
+            </tr>
+            <tr>
+                <td>時間を表示</td>
+                <td>チェックすると日付の後ろに時刻（<code>H:i</code>）を付けます。</td>
+            </tr>
+            <tr>
+                <td>構造化マークアップ</td>
+                <td>チェックすると JSON-LD を出力します（下の「構造化データ (JSON-LD)」参照）。</td>
+            </tr>
+            <tr>
+                <td>カラー設定（日付の色）</td>
+                <td>アイコン・ラベル・日付の色を 1 色で指定します。公開日と更新日を両方表示するときは、公開日が薄く表示されます。</td>
+            </tr>
+            <tr>
+                <td>デザインパターン</td>
+                <td>バッジスタイル / シンプルテキスト / ボックススタイル / ライン付きスタイル の 4 種類から選びます。</td>
+            </tr>
+            <tr>
+                <td>ラベルテキスト</td>
+                <td>公開日・更新日の前に付ける文字（既定は「公開日」「更新日」）。表示スタイルが「アイコンのみ」のときは使われないため、行が隠れます。</td>
+            </tr>
+            <tr>
+                <td>更新日の表示条件</td>
+                <td>「公開直後の場合は更新日を表示しない」にチェックすると、公開から 24 時間以内の更新は更新日として表示しません。対象投稿タイプのどれかで「更新日を表示」にチェックしているときだけ、この行が表示されます。</td>
+            </tr>
+            <tr>
+                <td>カスタムCSS</td>
+                <td>サイト全体の &lt;head&gt; に追加するスタイルです。HTML タグは取り除かれます（子セレクタ <code>&gt;</code> や引用符はそのまま使えます）。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>どの日付が表示されるか</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:40%;">投稿タイプの設定</th>
+                <th>表示</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>公開日を表示・更新日を表示</td>
+                <td>公開日を表示します。実際に更新されていれば更新日も表示します（「公開直後の場合は更新日を表示しない」がオンなら、公開から 24 時間以内の更新は表示しません）。</td>
+            </tr>
+            <tr>
+                <td>公開日を表示のみ</td>
+                <td>公開日だけを表示します。</td>
+            </tr>
+            <tr>
+                <td>更新日を表示のみ</td>
+                <td>更新日を表示します。更新日が表示条件で隠れるとき（未更新・公開直後の更新）も、日付を 1 つ表示します。その値は実際の最終更新日時（未更新の投稿では公開日時と同じ）です。</td>
+            </tr>
+            <tr>
+                <td>両方とも外す</td>
+                <td>日付を表示しません。</td>
+            </tr>
+        </tbody>
+    </table>
 
     <h3>フロントエンド表示例</h3>
     <figure class="screenshot">
@@ -42,172 +126,129 @@
         <figcaption>投稿ページに表示された公開日・更新日バッジ</figcaption>
     </figure>
 
-    <table>
-        <thead>
-            <tr>
-                <th style="width:35%;">設定項目</th>
-                <th>説明</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>テキスト色</td>
-                <td>日付テキストの色を設定します。デフォルトはテーマの本文テキスト色に準拠します。</td>
-            </tr>
-            <tr>
-                <td>背景色</td>
-                <td>日付表示エリアの背景色を設定します。透明も指定可能です。</td>
-            </tr>
-            <tr>
-                <td>アイコン色</td>
-                <td>カレンダーアイコンの色を設定します（アイコン付きデザイン選択時のみ）。</td>
-            </tr>
-            <tr>
-                <td>ラベル色</td>
-                <td>「公開日」「更新日」ラベルの色を設定します（ラベルデザイン選択時のみ）。</td>
-            </tr>
-        </tbody>
-    </table>
+    <h2>出力される HTML</h2>
 
-    <div class="callout callout-tip">
-        <div class="callout-title">ヒント</div>
-        <p>色の設定にはカラーピッカーが使用できます。HEX値を直接入力することも可能です。テーマとの調和を意識し、コントラスト比を十分に確保してください。</p>
-    </div>
+    <p>記事本文の前後に、次のような HTML を挿入します。日付は <code>&lt;published-date&gt;</code> / <code>&lt;updated-date&gt;</code> というカスタム要素で囲まれ、<code>datetime</code> 属性にサイトのタイムゾーン付きの ISO 8601 形式の日時が入ります。</p>
 
-    <h2>フォント設定</h2>
-
-    <p>日付テキストのフォントスタイルをカスタマイズできます。</p>
-
-    <table>
-        <thead>
-            <tr>
-                <th style="width:35%;">設定項目</th>
-                <th>説明</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>フォントサイズ</td>
-                <td>日付テキストのフォントサイズを設定します。テーマの本文サイズに合わせて調整してください。</td>
-            </tr>
-            <tr>
-                <td>フォントウェイト</td>
-                <td>太字（bold）または通常（normal）を選択できます。</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h2>カスタムHTML要素</h2>
-
-    <p>本プラグインは <code>&lt;ksplud-date&gt;</code> というカスタムHTML要素を使用して日付を表示します。Web Componentsの技術を活用した軽量な実装です。</p>
-
-    <h3>仕組み</h3>
-
-    <div class="step">
-        <span class="step-number">1</span>
-        <div class="step-body">
-            <p>プラグインはコンテンツの前後に <code>&lt;ksplud-date&gt;</code> カスタム要素を挿入します。</p>
-        </div>
-    </div>
-
-    <div class="step">
-        <span class="step-number">2</span>
-        <div class="step-body">
-            <p>フロントエンドJavaScript（5.4KB）がカスタム要素を定義し、Shadow DOMを使用してスタイルをカプセル化します。</p>
-        </div>
-    </div>
-
-    <div class="step">
-        <span class="step-number">3</span>
-        <div class="step-body">
-            <p>テーマのCSSとの干渉を防ぎながら、設定に基づいたデザインで日付を表示します。</p>
-        </div>
-    </div>
+    <pre><code>&lt;div class="ksplud-dates-wrapper ksplud-pattern-badge ksplud-both-dates"&gt;
+  &lt;div class="ksplud-date ksplud-date-updated"&gt;
+    &lt;span class="ksplud-icon"&gt;(アイコン)&lt;/span&gt;
+    &lt;span class="ksplud-label"&gt;更新日:&lt;/span&gt;
+    &lt;updated-date datetime="2024-06-20T15:45:00+09:00"&gt;2024年6月20日&lt;/updated-date&gt;
+  &lt;/div&gt;
+  &lt;div class="ksplud-date ksplud-date-published"&gt;
+    &lt;span class="ksplud-icon"&gt;(アイコン)&lt;/span&gt;
+    &lt;span class="ksplud-label"&gt;公開日:&lt;/span&gt;
+    &lt;published-date datetime="2024-01-15T10:30:00+09:00"&gt;2024年1月15日&lt;/published-date&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
 
     <div class="callout callout-note">
         <div class="callout-title">補足</div>
-        <p>カスタムHTML要素はすべてのモダンブラウザ（Chrome、Firefox、Safari、Edge）でサポートされています。IE11はサポート対象外です。</p>
+        <p>見た目はプラグインの CSS（<code>public/css/public-style.css</code>）と、設定画面の色・デザインパターンで決まります。テーマの CSS が優先される場合は「カスタムCSS」で調整してください。</p>
     </div>
-
-    <h3>出力されるHTMLの例</h3>
-
-    <pre><code>&lt;ksplud-date
-  data-published="2024-01-15"
-  data-updated="2024-06-20"
-  data-design="icon"
-  data-color-text="#333333"
-  data-color-bg="transparent"&gt;
-&lt;/ksplud-date&gt;</code></pre>
-
-    <h2>表示内容の設定</h2>
-
-    <p>日付として表示する内容を細かく設定できます。</p>
-
-    <table>
-        <thead>
-            <tr>
-                <th style="width:35%;">設定項目</th>
-                <th>説明</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>公開日の表示</td>
-                <td>公開日を表示するかどうかを設定します。</td>
-            </tr>
-            <tr>
-                <td>更新日の表示</td>
-                <td>更新日を表示するかどうかを設定します。公開日と更新日が同じ場合は非表示にするオプションもあります。</td>
-            </tr>
-            <tr>
-                <td>日付フォーマット</td>
-                <td>WordPressの日付フォーマット設定に準拠します。管理画面の「設定 &gt; 一般」で変更できます。</td>
-            </tr>
-        </tbody>
-    </table>
 
     <div class="callout callout-warning">
-        <div class="callout-title">注意</div>
-        <p>公開日と更新日の両方を非表示にした場合でも、JSON-LDの出力は継続されます。構造化データのみを出力し、視覚的な日付表示を行わない運用も可能です。</p>
+        <div class="callout-title">表示後の要素（JavaScript による置き換え）</div>
+        <p>上の HTML はサーバーが出力する形（ページのソース）です。ブラウザでは、プラグインの JavaScript（<code>public/js/custom-elements.js</code>）がページの読み込みの約 0.1 秒後に <code>&lt;published-date&gt;</code> / <code>&lt;updated-date&gt;</code> を <code>&lt;span class="ksplud-published-date-fallback"&gt;</code> / <code>&lt;span class="ksplud-updated-date-fallback"&gt;</code> に置き換えます。日時は <code>datetime</code> 属性から <code>data-datetime</code> 属性に移ります。</p>
+        <p>開発者ツールで見える要素はこの span です。「カスタムCSS」で日付の文字にスタイルを当てるときは、<code>published-date, updated-date, .ksplud-published-date-fallback, .ksplud-updated-date-fallback</code> の両方を指定してください（プラグインの色の指定も両方に当てています）。</p>
     </div>
 
-    <h2>JSON-LDの詳細</h2>
+    <h2>構造化データ (JSON-LD)</h2>
 
-    <p>本プラグインが出力するJSON-LDスキーマの詳細を説明します。</p>
+    <p>「構造化マークアップ」をオンにすると、対象投稿タイプの個別ページの &lt;head&gt; に次の JSON-LD を出力します。日付の表示設定（公開日・更新日の表示の有無）とは独立して出力されます。</p>
 
-    <h3>DigitalDocumentスキーマ</h3>
-    <p>DigitalDocument は Schema.org で定義されたデジタル文書のスキーマです。ブログ記事やWebページのメタデータを構造化するのに適しています。</p>
-
-    <h3>CreateAction / UpdateAction</h3>
-    <p>CreateAction はコンテンツの作成（公開）イベント、UpdateAction はコンテンツの更新イベントを表します。<code>potentialAction</code> プロパティとして DigitalDocument に関連付けられ、コンテンツのライフサイクルを明確に伝達します。</p>
+    <pre><code>{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "DigitalDocument",
+      "@id": "https://example.com/post-url/#doc",
+      "url": "https://example.com/post-url/",
+      "datePublished": "2024-01-15T10:30:00+09:00",
+      "dateModified": "2024-06-20T15:45:00+09:00"
+    },
+    {
+      "@type": "CreateAction",
+      "@id": "https://example.com/post-url/#create",
+      "startTime": "2024-01-15T10:30:00+09:00",
+      "object": { "@id": "https://example.com/post-url/#doc" }
+    },
+    {
+      "@type": "UpdateAction",
+      "@id": "https://example.com/post-url/#update",
+      "startTime": "2024-06-20T15:45:00+09:00",
+      "object": { "@id": "https://example.com/post-url/#doc" }
+    }
+  ]
+}</code></pre>
 
     <table>
         <thead>
             <tr>
-                <th style="width:35%;">スキーマ</th>
+                <th style="width:30%;">スキーマ</th>
                 <th>役割</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>DigitalDocument</td>
-                <td>デジタル文書としてのページメタデータ（名前、URL、作成日、更新日）を構造化</td>
+                <td>ページの URL・公開日 (datePublished)・最終更新日 (dateModified)</td>
             </tr>
             <tr>
                 <td>CreateAction</td>
-                <td>コンテンツの作成（公開）日時を構造化データとして伝達</td>
+                <td>公開の出来事（startTime = 公開日時）。object で DigitalDocument を指します</td>
             </tr>
             <tr>
                 <td>UpdateAction</td>
-                <td>コンテンツの最終更新日時を構造化データとして伝達</td>
+                <td>更新の出来事（startTime = 最終更新日時）。最終更新日時が公開日時と違うときだけ出力します</td>
             </tr>
         </tbody>
     </table>
 
-    <div class="callout callout-tip">
-        <div class="callout-title">ヒント</div>
-        <p>CreateAction/UpdateAction のスキーマはGoogleの公式ドキュメントでも推奨されている構造です。コンテンツの鮮度をアピールすることで、検索結果での評価向上が期待できます。</p>
+    <div class="callout callout-note">
+        <div class="callout-title">補足</div>
+        <p>テーマや他の SEO プラグインが出力する Article・BlogPosting・WebPage とは別の型（DigitalDocument）を使うため、既存の構造化データと競合しません。出力は Schema.org Validator やリッチリザルトテストで確認できます。</p>
     </div>
+
+    <h2>Last-Modified ヘッダー</h2>
+
+    <p>対象投稿タイプの個別ページでは、HTTP レスポンスに <code>Last-Modified</code> ヘッダー（投稿の最終更新日時、GMT）を付けます。</p>
+
+    <h2>ショートコード</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:35%;">ショートコード</th>
+                <th>説明・属性</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>[published_date]</code></td>
+                <td>公開日を表示します。属性: <code>format</code>（日付形式）、<code>icon</code>（true / false）、<code>label</code>（ラベルの文字）、<code>class</code>（追加の CSS クラス）</td>
+            </tr>
+            <tr>
+                <td><code>[updated_date]</code></td>
+                <td>更新日を表示します。属性は <code>[published_date]</code> と同じものに加えて <code>hide_if_not_modified</code>（true / false。省略すると設定画面の「公開直後の場合は更新日を表示しない」に従う）</td>
+            </tr>
+            <tr>
+                <td><code>[publish_update_dates]</code></td>
+                <td>更新日と公開日を並べて表示します。属性: <code>separator</code>（区切りの文字）、<code>wrapper_class</code>（全体を囲む要素の CSS クラス）</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>PHP 関数</h2>
+
+    <pre><code>&lt;?php KSPLUD_Display::display_both_dates(); ?&gt;           // 設定どおりの日付表示 (HTML)
+&lt;?php KSPLUD_Display::display_published_date(); ?&gt;       // 公開日 (HTML)
+&lt;?php KSPLUD_Display::display_updated_date(); ?&gt;         // 更新日 (HTML)
+&lt;?php echo KSPLUD_Display::get_published_date(null, 'Y/m/d'); ?&gt; // 公開日の文字だけ
+&lt;?php echo KSPLUD_Display::get_updated_date(null, 'Y/m/d'); ?&gt;   // 更新日の文字だけ</code></pre>
+
+    <p>いずれも第 1 引数に投稿 ID を渡せます（省略時は現在の投稿）。<code>display_*</code> は第 2 引数に <code>false</code> を渡すと出力せずに HTML を返します。</p>
 
     <nav class="page-nav">
         <a href="setup.html" class="prev">&laquo; インストール・初期設定</a>
@@ -216,7 +257,7 @@
 
     <footer class="manual-footer">
         <p>作者: <a href="https://www.tsuyoshikashiwazaki.jp/profile/" target="_blank" rel="noopener">柏崎剛（Tsuyoshi Kashiwazaki）</a></p>
-        <p>プラグイン: Kashiwazaki SEO Published &amp; Last Updated Dates v1.0.2</p>
+        <p>プラグイン: Kashiwazaki SEO Published &amp; Last Updated Dates v1.0.3</p>
     </footer>
 </main>
 

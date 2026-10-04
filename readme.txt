@@ -3,7 +3,7 @@ Contributors: tsuyoshikashiwazaki
 Tags: seo, published date, updated date, schema markup, structured data, last-modified
 Requires at least: 5.0
 Tested up to: 6.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -39,6 +39,9 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 * `icon` - アイコンの表示/非表示（例: icon="false"）
 * `label` - ラベルテキスト（例: label="投稿日"）
 * `class` - 追加のCSSクラス（例: class="my-custom-date"）
+
+**updated_date のみ**
+* `hide_if_not_modified` - 公開から24時間以内の更新を表示しない（例: hide_if_not_modified="false"）。省略すると設定画面の「公開直後の場合は更新日を表示しない」に従う
 
 **publish_update_dates**
 * `separator` - 区切り文字（例: separator=" | "）
@@ -151,6 +154,18 @@ HTTPレスポンスヘッダーに記事の最終更新日を追加する機能�
 
 == Changelog ==
 
+= 1.0.3 =
+* 修正: Last-Modified ヘッダーと日付の要素の datetime 属性が、サイトのタイムゾーンの分だけずれていた問題を修正（日本時間のサイトでは 9 時間後の時刻になっていた）
+* 修正: 設定画面の「公開直後の場合は更新日を表示しない」が常に隠れていて変更できなかった問題を修正
+* 修正: 一覧・検索・404 などのページで、URL の末尾が同じスラッグの記事に置き換わることがあった問題を修正（URL を書き換える処理を削除）
+* 修正: カスタム CSS に「>」や引用符を書くと CSS が効かなかった問題を修正
+* 修正: 公開日・更新日をどちらも表示しない設定でも日付が表示されていた問題を修正。更新日だけを表示する設定で更新日が表示条件で隠れたときは、従来どおり日付を 1 つ表示し、その値を公開日ではなく実際の最終更新日時にした
+* 修正: 投稿タイプの「公開日を表示」「更新日を表示」を両方外した状態を保存できなかった問題を修正
+* 修正: 更新の有無を表示用の日付の文字で判定していたため、同じ日の更新などが表示されなかった問題を修正（自動表示で、実際の時刻で判定する）
+* 修正: ショートコード [updated_date]・[publish_update_dates] が「公開直後の場合は更新日を表示しない」の設定を見ていなかった問題を修正
+* 修正: HTML の規格に合っていなかった日付の要素の microdata を削除（構造化データは JSON-LD で出力）
+* 修正: 古いバージョンで保存した設定に項目が欠けていると、PHP の Notice の文がラベルとして保存されてしまう問題を修正
+
 = 1.0.2 =
 * Fixed: カスタム投稿タイプのアーカイブページが誤って個別記事に変換される問題を修正
 * Improved: fix_query_conflicts()でアーカイブページ（投稿タイプアーカイブ、カテゴリー、タグ、タクソノミー、日付）をスキップするように改善
@@ -172,6 +187,9 @@ HTTPレスポンスヘッダーに記事の最終更新日を追加する機能�
 * カスタムCSS対応
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+Last-Modified ヘッダーと日付の時刻のずれ、設定画面で変更できなかった項目、古い設定データでラベルにエラー文が出る問題など、多数の不具合を修正しました。
 
 = 1.0.2 =
 カスタム投稿タイプのアーカイブページが正しく表示されるようになりました。アーカイブページが個別記事として表示されていた問題を修正しています。

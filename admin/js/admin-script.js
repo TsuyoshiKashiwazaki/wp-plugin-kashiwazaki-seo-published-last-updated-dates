@@ -15,10 +15,21 @@
         }
 
         var $hideIfNotModified = $('input[name="ksplud_settings[hide_if_not_modified]"]');
-        var $showUpdated = $('input[name="ksplud_settings[show_updated]"]');
+        // 「更新日を表示」は投稿タイプ別のチェックボックス (同名の hidden 入力は除く)
+        var $showUpdated = $('input[type="checkbox"][name^="ksplud_settings[post_type_settings]"][name$="[show_updated]"]');
+        var $postTypeCheckboxes = $('.ksplud-post-type-checkbox');
 
+        // 有効な投稿タイプのどれかで更新日を表示するときだけ「更新日の表示条件」を出す
         function toggleHideIfNotModified() {
-            if ($showUpdated.is(':checked')) {
+            var anyUpdatedShown = $showUpdated.filter(function () {
+                var postType = $(this).closest('.ksplud-post-type-settings').data('post-type');
+                var $typeCheckbox = $postTypeCheckboxes.filter(function () {
+                    return $(this).data('post-type') === postType;
+                });
+                return this.checked && $typeCheckbox.is(':checked');
+            }).length > 0;
+
+            if (anyUpdatedShown) {
                 $hideIfNotModified.closest('tr').show();
             } else {
                 $hideIfNotModified.closest('tr').hide();
@@ -27,9 +38,8 @@
 
         toggleHideIfNotModified();
 
-        $showUpdated.on('change', function () {
-            toggleHideIfNotModified();
-        });
+        $showUpdated.on('change', toggleHideIfNotModified);
+        $postTypeCheckboxes.on('change', toggleHideIfNotModified);
 
         var $displayStyle = $('select[name="ksplud_settings[display_style]"]');
         var $labelInputs = $('input[name="ksplud_settings[published_text]"], input[name="ksplud_settings[updated_text]"]');

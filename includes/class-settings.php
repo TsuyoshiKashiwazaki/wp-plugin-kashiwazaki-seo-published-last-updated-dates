@@ -16,7 +16,43 @@ class KSPLUD_Settings {
     }
 
     private function __construct() {
-        $this->options = get_option('ksplud_settings', $this->get_default_options());
+        $this->options = $this->normalize_options(get_option('ksplud_settings', array()));
+    }
+
+    /**
+     * 旧バージョンで保存された設定との互換性を保つ
+     *
+     * get_option() の既定値はオプション自体が無いときにしか使われないため、
+     * 保存済みの設定に後から追加された項目が欠けていると未定義キーになる。
+     * 欠けている項目は既定値で補う。
+     */
+    private function normalize_options($options) {
+        $defaults = $this->get_default_options();
+
+        if (!is_array($options)) {
+            return $defaults;
+        }
+
+        // 投稿タイプ別の設定を持たない旧形式の設定では、既定の投稿タイプ別の設定 (表示する) を補わない。
+        // 補うと、保存済みの全体設定 (show_published / show_updated) に届かなくなる (get_post_type_setting のフォールバック)
+        if (!empty($options) && !array_key_exists('post_type_settings', $options)) {
+            $options['post_type_settings'] = array();
+        }
+
+        $options = wp_parse_args($options, $defaults);
+
+        // 旧バージョンの不具合で PHP のエラー文がラベルとして保存されている場合は既定値に戻す
+        foreach (array('published_text', 'updated_text') as $key) {
+            if (!is_string($options[$key]) || $this->is_php_error_text($options[$key])) {
+                $options[$key] = $defaults[$key];
+            }
+        }
+
+        return $options;
+    }
+
+    private function is_php_error_text($value) {
+        return (bool) preg_match('/^(?:PHP )?(?:Notice|Warning|Deprecated|Fatal error):\s+Undefined (?:index|array key)/', $value);
     }
 
     public function get_default_options() {

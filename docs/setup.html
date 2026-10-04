@@ -12,7 +12,7 @@
 <nav class="sidebar">
     <div class="sidebar-header">
         <h2 style="color:#fff;">Published Dates</h2>
-        <span class="version">v1.0.2</span>
+        <span class="version">v1.0.3</span>
         <img src="images/main-visual.png" alt="" style="width:100%;border-radius:4px;margin-top:8px;">
     </div>
     <ul>
@@ -32,14 +32,14 @@
     <div class="step">
         <span class="step-number">1</span>
         <div class="step-body">
-            <p>WordPress管理画面から <strong>プラグイン &gt; 新規追加</strong> に移動し、「Kashiwazaki SEO Published &amp; Last Updated Dates」を検索します。または、プラグインのZIPファイルを <strong>プラグイン &gt; 新規追加 &gt; プラグインのアップロード</strong> からアップロードします。</p>
+            <p><a href="https://github.com/TsuyoshiKashiwazaki/wp-plugin-kashiwazaki-seo-published-last-updated-dates" target="_blank" rel="noopener">GitHub のリポジトリ</a>からプラグインの ZIP ファイルを入手し、WordPress 管理画面の <strong>プラグイン &gt; 新規追加 &gt; プラグインのアップロード</strong> からアップロードします。または、プラグインのフォルダを <code>/wp-content/plugins/</code> に置きます。</p>
         </div>
     </div>
 
     <div class="step">
         <span class="step-number">2</span>
         <div class="step-body">
-            <p>「今すぐインストール」をクリックし、インストール完了後「有効化」をクリックします。</p>
+            <p>アップロード後（またはフォルダを置いた後）、<strong>プラグイン</strong> の一覧で「有効化」をクリックします。</p>
         </div>
     </div>
 
@@ -57,7 +57,7 @@
 
     <div class="callout callout-tip">
         <div class="callout-title">ヒント</div>
-        <p>有効化直後から、デフォルト設定で公開日・更新日の表示とJSON-LD出力が自動的に開始されます。必要に応じて以下の設定を調整してください。</p>
+        <p>有効化直後から、既定の設定（投稿で、記事の前後両方に日付を表示・JSON-LD を出力）で動き始めます。必要に応じて以下の設定を調整してください。</p>
     </div>
 
     <h2>基本設定</h2>
@@ -74,22 +74,26 @@
         </thead>
         <tbody>
             <tr>
-                <td>コンテンツの前</td>
-                <td>記事本文の直前に日付を表示します。最も一般的な配置です。</td>
+                <td>記事の前</td>
+                <td>記事本文の直前に日付を表示します。</td>
             </tr>
             <tr>
-                <td>コンテンツの後</td>
+                <td>記事の後</td>
                 <td>記事本文の直後に日付を表示します。</td>
             </tr>
             <tr>
-                <td>コンテンツの前後</td>
-                <td>記事本文の前と後の両方に日付を表示します。</td>
+                <td>記事の前後両方</td>
+                <td>記事本文の前と後の両方に日付を表示します（有効化直後の既定）。</td>
+            </tr>
+            <tr>
+                <td>自動表示しない（ショートコードのみ）</td>
+                <td>記事本文には挿入しません。ショートコードや PHP 関数で好きな場所に表示します（<a href="display-settings.html">詳細設定</a>参照）。</td>
             </tr>
         </tbody>
     </table>
 
     <h3>投稿タイプ別設定</h3>
-    <p>日付を表示する投稿タイプを選択できます。投稿（post）、固定ページ（page）、カスタム投稿タイプごとに有効・無効を切り替えられます。</p>
+    <p>日付を表示する投稿タイプを選択できます。投稿（post）、固定ページ（page）、カスタム投稿タイプごとに有効・無効を切り替え、有効にした投稿タイプごとに「公開日を表示」「更新日を表示」を選べます。</p>
 
     <table>
         <thead>
@@ -131,43 +135,49 @@
         </thead>
         <tbody>
             <tr>
-                <td>シンプル</td>
-                <td>テキストのみのシンプルな表示。どんなテーマにも調和します。</td>
+                <td>バッジスタイル</td>
+                <td>丸みを帯びた現代的なバッジデザイン（既定）。</td>
             </tr>
             <tr>
-                <td>アイコン付き</td>
-                <td>カレンダーアイコン付きの表示。視認性が向上します。</td>
+                <td>シンプルテキスト</td>
+                <td>装飾のないシンプルなテキスト表示。</td>
             </tr>
             <tr>
-                <td>バッジ</td>
-                <td>バッジスタイルの表示。更新日が目立つデザインです。</td>
+                <td>ボックススタイル</td>
+                <td>角のあるボックス型のデザイン。</td>
             </tr>
             <tr>
-                <td>ラベル</td>
-                <td>ラベル付きの表示。公開日・更新日が明確に区別されます。</td>
+                <td>ライン付きスタイル</td>
+                <td>左端にカラーラインが入るデザイン。</td>
             </tr>
         </tbody>
     </table>
 
     <h2>JSON-LD構造化データ</h2>
-    <p>本プラグインは DigitalDocument + CreateAction + UpdateAction スキーマのJSON-LDを自動出力します。この機能はデフォルトで有効になっています。</p>
+    <p>本プラグインは DigitalDocument + CreateAction + UpdateAction スキーマの JSON-LD を、対象投稿タイプの個別ページに自動出力します。この機能はデフォルトで有効で、設定画面の「構造化マークアップ」でオン・オフできます。各項目の意味は<a href="display-settings.html">詳細設定</a>を参照してください。</p>
 
     <p>出力されるJSON-LDの例:</p>
     <pre><code>{
   "@context": "https://schema.org",
-  "@type": "DigitalDocument",
-  "name": "記事タイトル",
-  "url": "https://example.com/post/",
-  "dateCreated": "2024-01-15",
-  "dateModified": "2024-06-20",
-  "potentialAction": [
+  "@graph": [
+    {
+      "@type": "DigitalDocument",
+      "@id": "https://example.com/post-url/#doc",
+      "url": "https://example.com/post-url/",
+      "datePublished": "2024-01-15T10:30:00+09:00",
+      "dateModified": "2024-06-20T15:45:00+09:00"
+    },
     {
       "@type": "CreateAction",
-      "startTime": "2024-01-15"
+      "@id": "https://example.com/post-url/#create",
+      "startTime": "2024-01-15T10:30:00+09:00",
+      "object": { "@id": "https://example.com/post-url/#doc" }
     },
     {
       "@type": "UpdateAction",
-      "startTime": "2024-06-20"
+      "@id": "https://example.com/post-url/#update",
+      "startTime": "2024-06-20T15:45:00+09:00",
+      "object": { "@id": "https://example.com/post-url/#doc" }
     }
   ]
 }</code></pre>
@@ -184,7 +194,7 @@
 
     <footer class="manual-footer">
         <p>作者: <a href="https://www.tsuyoshikashiwazaki.jp/profile/" target="_blank" rel="noopener">柏崎剛（Tsuyoshi Kashiwazaki）</a></p>
-        <p>プラグイン: Kashiwazaki SEO Published &amp; Last Updated Dates v1.0.2</p>
+        <p>プラグイン: Kashiwazaki SEO Published &amp; Last Updated Dates v1.0.3</p>
     </footer>
 </main>
 

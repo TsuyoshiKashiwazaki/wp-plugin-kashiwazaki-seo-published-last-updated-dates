@@ -30,9 +30,7 @@
                     this.setAttribute('title', `公開日: ${date.toLocaleDateString('ja-JP')}`);
                 }
             }
-
-            // Schema.org microdata
-            this.setAttribute('itemprop', 'datePublished');
+            // 構造化データは JSON-LD で出力するため、microdata の属性は付けない
         }
 
         static get observedAttributes() {
@@ -68,9 +66,7 @@
                     this.setAttribute('title', `更新日: ${date.toLocaleDateString('ja-JP')}`);
                 }
             }
-
-            // Schema.org microdata
-            this.setAttribute('itemprop', 'dateModified');
+            // 構造化データは JSON-LD で出力するため、microdata の属性は付けない
         }
 
         static get observedAttributes() {
